@@ -1,0 +1,13 @@
+mutation updateWalletSecurityDeposit(
+  $security_deposit: numeric = ""
+  $id: uuid = ""
+) {
+  update_wallets_by_pk(
+    pk_columns: {id: $id}
+    _inc: {security_deposit: $security_deposit}
+  ) {
+    id
+    security_deposit
+    created_at
+  }
+}

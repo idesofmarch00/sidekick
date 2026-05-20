@@ -1,0 +1,9 @@
+overwrite: true
+schema:
+  - 'https://supreme-mustang-86.hasura.app/v1/graphql':
+      headers:
+        x-hasura-admin-secret: gVpDomfT4GaYV76w7CmCLmWidk117lEJwrdqckLAnC8H2e62nLfXXS6ehzEAISu3
+documents: 'modules/**/graphql/*.graphql'
+generates:
+  generated/:
+    preset: 'client'

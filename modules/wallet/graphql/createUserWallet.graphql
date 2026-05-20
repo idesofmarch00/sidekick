@@ -1,0 +1,7 @@
+mutation createWallet($object: wallets_insert_input = {}) {
+  insert_wallets_one(object: $object) {
+    balance
+    created_at
+    id
+  }
+}

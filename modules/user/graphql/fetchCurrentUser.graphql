@@ -1,0 +1,15 @@
+query fetchCurrentUser {
+  users {
+    email
+    id
+    full_name
+    phone_number
+    user_organizations {
+      organization {
+        id
+        name
+      }
+    }
+    phone_number
+  }
+}

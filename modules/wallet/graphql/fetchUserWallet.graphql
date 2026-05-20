@@ -1,0 +1,20 @@
+query fetchUserWallet {
+  wallets {
+    balance
+    id
+    security_deposit
+    transactions {
+      ride_id
+      amount
+      ride {
+        end_time
+        start_time
+        total_cost
+        hub {
+          id
+          name
+        }
+      }
+    }
+  }
+}

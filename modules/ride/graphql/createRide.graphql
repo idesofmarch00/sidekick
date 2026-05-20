@@ -1,0 +1,18 @@
+mutation createRide($object: ride_details_insert_input = {}) {
+  insert_ride_details_one(object: $object) {
+    created_at
+    id
+  }
+}
+
+# Payload Example
+# object = {
+#   user_id: <USER_ID>,
+#   scooter_id: <SCOOTER_ID>,
+#   start_hub_id: <START_HUB_ID>,
+#   start_time: <START_TIME>,  # Format: YYYY-MM-DDTHH:MM:SSZ
+#   end_time: <END_TIME>,      # Format: YYYY-MM-DDTHH:MM:SSZ
+#   end_hub_id: <END_HUB_ID>,  # (Optional)
+#   total_cost: <TOTAL_COST>,  # (Optional) Example: 150.00
+#   cost_type: <COST_TYPE>     # (Optional) Example: "fixed" or "per_minute"
+# }

@@ -1,0 +1,11 @@
+query fetchScooterByNumber($regNo: String = "SCOOTER1") {
+  scooters(where: {registration_number: {_ilike: $regNo}}) {
+    id
+    is_active
+    latitude
+    longitude
+    registration_number
+    status
+    hub_id
+  }
+}

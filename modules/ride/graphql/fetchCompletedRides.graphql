@@ -1,0 +1,50 @@
+query fetchCompletedRides($id: uuid = "") {
+  ride_details(
+    where: {
+      ride_steps: {ride_step: {ride_steps: {steps: {_eq: RIDE_ENDED}}}}
+      user_id: {_eq: $id}
+    }
+  ) {
+    created_at
+    end_time
+    end_hub_id
+    id
+    scooter_id
+    start_hub_id
+    start_time
+    total_cost
+    ride_steps {
+      id
+      steps
+    }
+    hubByStartHubId {
+      latitude
+      longitude
+      name
+      id
+    }
+  }
+}
+
+# query fetchRideDetailsByUser($_eq: uuid = "6383b5a1-a742-42f1-84d4-5c51926b9eac") {
+#   ride_details(where: {user_id: {_eq: $_eq}}) {
+#     cost_type
+#     id
+#     ride_distance
+#     end_time
+#     created_at
+#     start_time
+#     total_cost
+#     user_id
+#     scooter_id
+#     ride_steps {
+#       ride_details_id
+#       id
+#       ride_step {
+#         value
+#         comment
+#       }
+#       created_at
+#     }
+#   }
+# }

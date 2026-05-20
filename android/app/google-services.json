@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780346619181",
+    "project_id": "sidekick-c821e",
+    "storage_bucket": "sidekick-c821e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780346619181:android:086ef76d36116edfe40fa4",
+        "android_client_info": {
+          "package_name": "in.sidekick"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDmv_VZQGDVOn82mLv0IlR_w6BTwaIPg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

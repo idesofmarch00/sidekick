@@ -1,0 +1,10 @@
+query fetchAllHubs {
+  hubs {
+    id
+    latitude
+    longitude
+    name
+    organization_id
+    created_at
+  }
+}

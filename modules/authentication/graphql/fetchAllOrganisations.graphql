@@ -1,0 +1,6 @@
+query fetchAllOrganisations {
+  organizations {
+    id
+    name
+  }
+}

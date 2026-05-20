@@ -1,0 +1,14 @@
+mutation updateRideEndTime(
+  $id: uuid = ""
+  $end_time: timestamp = ""
+  $total_cost: numeric = ""
+) {
+  update_ride_details_by_pk(
+    pk_columns: {id: $id}
+    _set: {end_time: $end_time, total_cost: $total_cost}
+  ) {
+    id
+    end_time
+    created_at
+  }
+}
