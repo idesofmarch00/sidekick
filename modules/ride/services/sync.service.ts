@@ -95,7 +95,8 @@ class SyncService {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 4000);
       
-      const response = await fetch('https://supreme-mustang-86.hasura.app/v1/version', {
+      // const response = await fetch('https://supreme-mustang-86.hasura.app/v1/version', {
+      const response = await fetch('http://localhost:3000/v1/version', {
         method: 'GET',
         signal: controller.signal
       });

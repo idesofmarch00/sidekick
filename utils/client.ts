@@ -30,7 +30,8 @@ const authErrorCodes = ['invalid-headers', 'invalid-jwt'];
  */
 export const initializeClient = () => {
   const graphQlClient = new Client({
-    url: 'https://supreme-mustang-86.hasura.app/v1/graphql',
+    // url: 'https://supreme-mustang-86.hasura.app/v1/graphql',
+    url: 'http://localhost:3000/graphql',
     exchanges: [
       cacheExchange,
       authExchange(async utils => {

@@ -1,0 +1,20 @@
+{
+  "name": "sidekick-backend",
+  "version": "1.0.0",
+  "description": "Custom Fastify & Mercurius (GraphQL) Backend with Pure-JS JSON Engine for Sidekick",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "fastify": "^4.26.2",
+    "graphql": "^16.8.1",
+    "luxon": "^3.4.4",
+    "mercurius": "^13.3.3",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

@@ -159,7 +159,8 @@ const AuthService = {
   fetchAllOrganistions: async function () {
     try {
       const response = await axios.get(
-        'https://supreme-mustang-86.hasura.app/api/rest/fetchallorganisations',
+        // 'https://supreme-mustang-86.hasura.app/api/rest/fetchallorganisations',
+        'http://localhost:3000/api/rest/fetchallorganisations',
       );
       setOrganisations(response.data.organizations);
     } catch (error) {
@@ -193,7 +194,8 @@ const AuthService = {
   }) => {
     try {
       const response = await axios.get(
-        'https://supreme-mustang-86.hasura.app/api/rest/checkuserexists',
+        // 'https://supreme-mustang-86.hasura.app/api/rest/checkuserexists',
+        'http://localhost:3000/api/rest/checkuserexists',
         {
           params: {
             _eq: args.employeeId,

@@ -1,0 +1,106 @@
+{
+  "organizations": [
+    {
+      "id": "org-default-uuid-1111",
+      "name": "Sidekick Premium Fleet"
+    }
+  ],
+  "users": [
+    {
+      "id": "6383b5a1-a742-42f1-84d4-5c51926b9eac",
+      "email": "saif.ahmed@example.com",
+      "full_name": "S Ahmed",
+      "phone_number": "+91 98765 43210"
+    }
+  ],
+  "user_organizations": [
+    {
+      "user_id": "6383b5a1-a742-42f1-84d4-5c51926b9eac",
+      "organization_id": "org-default-uuid-1111"
+    }
+  ],
+  "hubs": [
+    {
+      "id": "hub-1",
+      "name": "Downtown Hub (Indiranagar)",
+      "latitude": 12.9716,
+      "longitude": 77.5946,
+      "organization_id": "org-default-uuid-1111",
+      "created_at": "2026-05-22T17:44:56.560Z"
+    },
+    {
+      "id": "hub-2",
+      "name": "Tech Park Hub (Whitefield)",
+      "latitude": 12.9698,
+      "longitude": 77.75,
+      "organization_id": "org-default-uuid-1111",
+      "created_at": "2026-05-22T17:44:56.560Z"
+    },
+    {
+      "id": "hub-3",
+      "name": "Central Station Hub",
+      "latitude": 12.9779,
+      "longitude": 77.5724,
+      "organization_id": "org-default-uuid-1111",
+      "created_at": "2026-05-22T17:44:56.560Z"
+    },
+    {
+      "id": "hub-4",
+      "name": "HSR Layout Hub",
+      "latitude": 12.9141,
+      "longitude": 77.6413,
+      "organization_id": "org-default-uuid-1111",
+      "created_at": "2026-05-22T17:44:56.560Z"
+    }
+  ],
+  "scooters": [
+    {
+      "id": "scooter-1",
+      "registration_number": "SCOOTER1",
+      "status": "AVAILABLE",
+      "is_active": true,
+      "latitude": 12.9716,
+      "longitude": 77.5946,
+      "hub_id": "hub-1"
+    },
+    {
+      "id": "scooter-2",
+      "registration_number": "SCOOTER2",
+      "status": "AVAILABLE",
+      "is_active": true,
+      "latitude": 12.9698,
+      "longitude": 77.75,
+      "hub_id": "hub-2"
+    },
+    {
+      "id": "scooter-3",
+      "registration_number": "SCOOTER3",
+      "status": "AVAILABLE",
+      "is_active": true,
+      "latitude": 12.9779,
+      "longitude": 77.5724,
+      "hub_id": "hub-3"
+    },
+    {
+      "id": "scooter-4",
+      "registration_number": "SCOOTER4",
+      "status": "AVAILABLE",
+      "is_active": true,
+      "latitude": 12.9141,
+      "longitude": 77.6413,
+      "hub_id": "hub-4"
+    }
+  ],
+  "ride_details": [],
+  "ride_steps": [],
+  "wallets": [
+    {
+      "id": "wallet-default-uuid-2222",
+      "balance": 500,
+      "security_deposit": 200,
+      "created_at": "2026-05-22T17:44:56.560Z",
+      "org_id": "org-default-uuid-1111"
+    }
+  ],
+  "transactions": []
+}
