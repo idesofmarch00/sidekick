@@ -11,6 +11,10 @@ interface TransactionListProps {
    */
   transactions: FetchCompletedRidesQuery['ride_details'];
   /**
+   * Callback when a transaction is clicked
+   */
+  onTransactionPress?: (transaction: FetchCompletedRidesQuery['ride_details'][0]) => void;
+  /**
    * Optional test ID for testing
    */
   testID?: string;
@@ -29,6 +33,7 @@ const ItemSeparatorComponent = () => {
  */
 const TransactionList: React.FC<TransactionListProps> = ({
   transactions,
+  onTransactionPress,
   testID = 'transaction-list',
 }) => {
   const {colors} = useThemeStore(state => state.theme);
@@ -36,9 +41,12 @@ const TransactionList: React.FC<TransactionListProps> = ({
   // Optimized render function
   const renderItem = useCallback(
     ({item}: {item: FetchCompletedRidesQuery['ride_details'][0]}) => (
-      <MemoizedTransactionCard transaction={item} />
+      <MemoizedTransactionCard 
+        transaction={item} 
+        onPress={() => onTransactionPress?.(item)}
+      />
     ),
-    [],
+    [onTransactionPress],
   );
 
   // Optimized key extractor

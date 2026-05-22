@@ -1,3 +1,13 @@
+jest.mock('@react-native-community/geolocation', () => ({
+  __esModule: true,
+  default: {
+    requestAuthorization: jest.fn(),
+    getCurrentPosition: jest.fn(),
+    watchPosition: jest.fn(),
+    clearWatch: jest.fn(),
+  },
+}));
+
 import { GPSKalmanFilter } from '../modules/ride/services/backgroundLocation.service';
 
 describe('GPSKalmanFilter Telemetry Signal Processing', () => {
@@ -42,7 +52,7 @@ describe('GPSKalmanFilter Telemetry Signal Processing', () => {
 
     // Expect smoothed output to be very close to the last coordinate
     expect(current.latitude).toBeCloseTo(28.70416, 4);
-    expect(current.longitude).toBeCloseTo(28.70416, 4);
+    expect(current.longitude).toBeCloseTo(77.10256, 4);
 
     // 3. Inject a huge GPS telemetry anomaly / jump (e.g. coordinates teleporting 100 meters away inside a tunnel)
     const anomalousLat = 28.70520; // Massive sudden jump in latitude

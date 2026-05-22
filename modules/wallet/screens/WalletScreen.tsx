@@ -14,12 +14,16 @@ import AddFundsButton from '@/modules/wallet/components/AddFundsButton';
 import {useRideStore, useThemeStore, useUserStore} from '@/globalStore';
 import {Divider, H3} from '@/components';
 
+// components
+import { RideJourneyDetailsModal } from '@/modules/ride/components';
+
 // services
 import {RideService, WalletService} from '@/globalService';
 
 const {colors} = useThemeStore.getState().theme;
 
 const WalletScreen: React.FC = () => {
+  const [selectedRideForModal, setSelectedRideForModal] = React.useState<any | null>(null);
   const navigation = useNavigation();
 
   const {rideHistory} = useRideStore();
@@ -85,6 +89,7 @@ const WalletScreen: React.FC = () => {
 
           <TransactionList
             transactions={rideHistory}
+            onTransactionPress={(ride) => setSelectedRideForModal(ride)}
             testID="transactions-list"
           />
         </View>
@@ -92,6 +97,13 @@ const WalletScreen: React.FC = () => {
 
       {/* Add funds button */}
       <AddFundsButton onPress={handleAddFunds} testID="add-funds-button" />
+
+      {/* Ride statistics watermark sharing modal */}
+      <RideJourneyDetailsModal
+        isVisible={selectedRideForModal !== null}
+        ride={selectedRideForModal}
+        onClose={() => setSelectedRideForModal(null)}
+      />
     </SafeAreaView>
   );
 };
