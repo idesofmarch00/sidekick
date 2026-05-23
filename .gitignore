@@ -79,3 +79,7 @@ yarn-error.log
 .env.*
 modules/home/config/mapConfig.ts
 react-native-easebuzz-kit
+
+# Ignore native directories to prevent API keys leakage in plist/gradle
+android/
+ios/
