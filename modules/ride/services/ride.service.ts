@@ -30,7 +30,6 @@ import {
   FetchCompletedRidesDocument,
 } from '@/generated/graphql';
 
-const {setHubs, setRideHistory, setCompletedRides} = useRideStore.getState();
 
 const WalletService = {
   fetchAllHubs: async function () {
@@ -39,7 +38,7 @@ const WalletService = {
       variables: {},
     });
 
-    setHubs(response.hubs);
+    useRideStore.getState().setHubs(response.hubs);
     return response.hubs;
   },
 
@@ -91,7 +90,7 @@ const WalletService = {
       variables: args,
     });
 
-    setRideHistory(response.ride_details);
+    useRideStore.getState().setRideHistory(response.ride_details);
 
     return response;
   },
@@ -113,7 +112,7 @@ const WalletService = {
       variables: args,
     });
 
-    setCompletedRides(response?.ride_details);
+    useRideStore.getState().setCompletedRides(response?.ride_details);
 
     return response.ride_details;
   },

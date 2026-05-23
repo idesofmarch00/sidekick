@@ -8,14 +8,13 @@ import {
   AuthBottomSheetComponent,
 } from '../types';
 
-const {
-  setAuthBottomSheetComponent,
-  setAuthBottomSheetSnapPoints,
-  setCurrentView,
-} = useAuthStore.getState();
-
 export const authUtils = {
   setBottomSheetView: (view: ViewType) => {
+    const {
+      setAuthBottomSheetComponent,
+      setAuthBottomSheetSnapPoints,
+      setCurrentView,
+    } = useAuthStore.getState();
     setCurrentView(view);
     setAuthBottomSheetSnapPoints(AuthBottomSheetSnapPoints[view]);
     setAuthBottomSheetComponent(AuthBottomSheetComponent[view]);

@@ -81,6 +81,8 @@ jest.mock('react-native-webview', () => {
 jest.mock('react-native-mmkv', () => ({
   MMKV: jest.fn().mockImplementation(() => ({
     getString: jest.fn(),
+    getBoolean: jest.fn(),
+    getNumber: jest.fn(),
     set: jest.fn(),
     delete: jest.fn(),
     clearAll: jest.fn(),
@@ -167,3 +169,14 @@ jest.mock('rn-swipe-button', () => {
     default: () => React.createElement(View),
   };
 });
+
+// Mock react-native-maps-directions
+jest.mock('react-native-maps-directions', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return {
+    __esModule: true,
+    default: () => React.createElement(View),
+  };
+});
+

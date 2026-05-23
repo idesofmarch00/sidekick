@@ -26,8 +26,6 @@ import {callMutation, callQuery} from '@/utils/client';
 // store
 import {useWalletStore} from '@/globalStore';
 
-const {setWallet} = useWalletStore.getState();
-
 const WalletService = {
   fetchUserWallet: async function () {
     const response: FetchUserWalletQuery = await callQuery({
@@ -35,7 +33,7 @@ const WalletService = {
       variables: {},
     });
 
-    setWallet(response.wallets[0]);
+    useWalletStore.getState().setWallet(response.wallets[0]);
 
     return response.wallets[0];
   },
