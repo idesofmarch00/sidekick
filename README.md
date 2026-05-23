@@ -1,97 +1,59 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Sidekick: Offline-First Geolocation Tracking & Sharing Engine
 
-# Getting Started
+Sidekick is a premium, senior-grade mobile application and self-contained local backend designed to facilitate resilient geospatial location tracking, route mapping, and transaction history. Inspired by high-end telemetry sharing platforms like Strava, Sidekick supports high-fidelity route composting, automated path simplification, and offline-first database synchronization.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+---
 
-## Step 1: Start Metro
+## 🚀 Core Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### 1. Robust Location Tracking & Geodesic Fallbacks
+* **High-Precision Geodesics**: Integrated mathematics utilities dynamically calculate accurate distances using the **Haversine formula** across successive GPS logs.
+* **Kalman Filtering**: Eliminates high-frequency GPS jitter and sudden measurement spikes to produce smooth, physical-prediction-aligned route coordinates.
+* **Douglas-Peucker Simplification**: Smooths path vectors by downsampling dense coordinate arrays, allowing fast canvas drawings and high-performance SVG maps with zero loss in visual accuracy.
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### 2. High-Fidelity Composting & Watermark Share Engine
+* **Platform-Agnostic HTML5 Canvas Composting**: Employs an isolated, lightweight HTML5 canvas within a hidden Web View to overlay completed ride routes, glowing vector paths, translucent glassmorphic dark gradients, and crisp white details.
+* **Premium Gradients & Camera Viewfinder**: Interfaces with native cameras or falls back to customized cyberpunk, sunset, carbon, and forest gradient backgrounds.
+* **Native Share Sheets**: Prompts quick downloads, clipboard copies, or external social sharing via native iOS/Android sharing sheets.
 
+### 3. Self-Contained Local GraphQL Backend (`sidekick-backend/`)
+* **Zero-Setup Server**: Built on Fastify + Mercurius (GraphQL) to require no external Docker containers, remote credentials, or configuration overhead.
+* **Embedded SQLite Database**: Auto-seeds relational database schemas with mock users, wallets, scooters, and hubs on initialization.
+* **Interactive GraphiQL IDE**: Access an interactive explorer playground directly at `http://localhost:3000/graphiql`.
+
+---
+
+## 🧪 Testing Suite
+
+Sidekick implements a thorough unit and widget testing environment to support rigorous Test-Driven Development (TDD) principles.
+
+* **Component Unit Tests**: Built with **React Native Testing Library (RNTL)** to verify layout structure, timezone-independent Luxon date-time renders, Rupees/Credits formatting conditions, and Touch callback bindings.
+* **Mathematical Utilities Validation**: Comprehensive suites covering GPS noise filtering, coordinate reductions, and geodesic distance meters.
+
+---
+
+## 💻 Getting Started
+
+### 1. Launch the Local Backend
+Navigate to the backend folder and start the server:
 ```sh
-# Using npm
+cd sidekick-backend
+npm install
+npm run dev
+```
+
+### 2. Launch the Mobile Client
+From the root of the project, start the Metro dev server:
+```sh
+npm install
 npm start
-
-# OR using Yarn
-yarn start
 ```
+In a separate terminal window, compile and run the app for your preferred platform:
+* **Android**: `npm run android`
+* **iOS**: `bundle exec pod install` && `npm run ios`
 
-## Step 2: Build and run your app
-
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
-
-### Android
-
+### 3. Run the Jest Test Suite
+Verify that all unit tests and component layouts pass:
 ```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+npm test
 ```
-
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
