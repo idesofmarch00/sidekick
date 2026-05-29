@@ -82,4 +82,5 @@ react-native-easebuzz-kit
 
 # Ignore native directories to prevent API keys leakage in plist/gradle
 android/
-ios/scripts/
+ios/
+scripts/
