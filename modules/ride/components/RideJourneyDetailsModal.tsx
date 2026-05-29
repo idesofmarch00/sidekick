@@ -243,12 +243,9 @@ export const RideJourneyDetailsModal: React.FC<RideJourneyDetailsModalProps> = (
     if (!isoStr) return '';
     return DateTime.fromISO(isoStr).toFormat('dd MMMM yyyy, hh:mm a');
   };
-
-  if (!ride) return null;
-
   return (
     <Modal
-      isVisible={isVisible}
+      isVisible={isVisible && !!ride}
       onBackdropPress={onClose}
       onBackButtonPress={onClose}
       style={styles.modalContainer}
@@ -256,265 +253,271 @@ export const RideJourneyDetailsModal: React.FC<RideJourneyDetailsModalProps> = (
       onSwipeComplete={onClose}
       propagateSwipe={true}
     >
-      <View style={[styles.content, { backgroundColor: colors.white }]}>
-        {/* Swipe drag line */}
-        <View style={styles.dragBar} />
+      {ride ? (
+        <>
+          <View style={[styles.content, { backgroundColor: colors.white }]}>
+            {/* Swipe drag line */}
+            <View style={styles.dragBar} />
 
-        {/* Header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={[styles.hubName, { color: colors.textPrimary }]}>
-              {ride.hubByStartHubId?.name || 'Ride Details'}
-            </Text>
-            <Text style={[styles.dateText, { color: colors.textSecondary }]}>
-              {getFormattedDate(ride.start_time)}
-            </Text>
-          </View>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={{ fontSize: 20, color: colors.textSecondary, fontWeight: 'bold' }}>✕</Text>
-          </TouchableOpacity>
-        </View>
-
-        {loadingCoords ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#FF5722" />
-            <Text style={{ marginTop: 12, color: colors.textSecondary }}>Loading ride telemetry...</Text>
-          </View>
-        ) : (
-          <View style={{ flex: 1 }}>
-            {/* Stats Dashboard Grid */}
-            <View style={styles.statsGrid}>
-              <View style={styles.statBox}>
-                <Text style={styles.statLabel}>DISTANCE</Text>
-                <Text style={[styles.statValue, { color: '#FF5722' }]}>
-                  {stats?.distanceKm || '0.0'} km
-                </Text>
-              </View>
-              <View style={styles.statBox}>
-                <Text style={styles.statLabel}>DURATION</Text>
-                <Text style={[styles.statValue, { color: colors.textPrimary }]}>
-                  {stats?.durationFormatted || '0s'}
-                </Text>
-              </View>
-              <View style={styles.statBox}>
-                <Text style={styles.statLabel}>AVG SPEED</Text>
-                <Text style={[styles.statValue, { color: colors.textPrimary }]}>
-                  {stats?.avgSpeedKmH || '0.0'} km/h
-                </Text>
-              </View>
-            </View>
-
-            {/* Sub-stats (Top Speed & Cost) */}
-            <View style={[styles.subStatsRow, { borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.border }]}>
+            {/* Header */}
+            <View style={styles.header}>
               <View>
-                <Text style={[styles.subStatsLabel, { color: colors.textSecondary }]}>Top Speed</Text>
-                <Text style={[styles.subStatsValue, { color: colors.textPrimary }]}>
-                  🔥 {stats?.maxSpeedKmH || '0.0'} km/h
+                <Text style={[styles.hubName, { color: colors.textPrimary }]}>
+                  {ride.hubByStartHubId?.name || 'Ride Details'}
+                </Text>
+                <Text style={[styles.dateText, { color: colors.textSecondary }]}>
+                  {getFormattedDate(ride.start_time)}
                 </Text>
               </View>
-              <View style={{ alignItems: 'flex-end' }}>
-                <Text style={[styles.subStatsLabel, { color: colors.textSecondary }]}>Total Cost</Text>
-                <Text style={[styles.subStatsValue, { color: '#FF5722', fontWeight: 'bold' }]}>
-                  {showCredits() ? `${ride.total_cost || 0} Credits` : `₹ ${ride.total_cost || 0}`}
-                </Text>
-              </View>
-            </View>
-
-            {/* Svg route geometry map shape */}
-            {renderSvgPath()}
-
-            {/* Share / Overlay button */}
-            <View style={styles.footer}>
-              <TouchableOpacity
-                style={styles.shareAccentButton}
-                onPress={() => setIsEditorOpen(true)}
-              >
-                <Text style={styles.shareAccentText}>📸 SHARE JOURNEY GRAPHIC</Text>
+              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <Text style={{ fontSize: 20, color: colors.textSecondary, fontWeight: 'bold' }}>✕</Text>
               </TouchableOpacity>
             </View>
-          </View>
-        )}
-      </View>
 
-      {/* SUB-MODAL: PREMIUM WATERMARK SHARE CARD DESIGNER */}
-      <Modal
-        isVisible={isEditorOpen}
-        onBackdropPress={() => {
-          if (!cameraActive) setIsEditorOpen(false);
-        }}
-        onBackButtonPress={() => setIsEditorOpen(false)}
-        style={styles.subModal}
-      >
-        <View style={styles.editorContent}>
-          {cameraActive && device ? (
-            // Full camera viewfinder overlay
-            <View style={StyleSheet.absoluteFillObject}>
-              <Camera
-                ref={cameraRef}
-                style={StyleSheet.absoluteFillObject}
-                device={device}
-                isActive={true}
-                photo={true}
-              />
-              {/* Camera snap controls overlay */}
-              <View style={styles.cameraControls}>
-                <TouchableOpacity
-                  style={styles.closeCameraBtn}
-                  onPress={() => setCameraActive(false)}
-                >
-                  <Text style={styles.cameraBtnText}>✕ Close</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.snapCircle} onPress={takePhoto} />
-                <View style={{ width: 60 }} />
+            {loadingCoords ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#FF5722" />
+                <Text style={{ marginTop: 12, color: colors.textSecondary }}>Loading ride telemetry...</Text>
               </View>
-            </View>
-          ) : (
-            <View style={styles.designerInner}>
-              <Text style={styles.editorHeading}>STATS WATERMARK EDITOR</Text>
-
-              {/* Photo View / Backdrop Preview */}
-              <View style={styles.previewBox}>
-                {capturedPhotoUri ? (
-                  <Image source={{ uri: capturedPhotoUri }} style={styles.previewImage} />
-                ) : selectedGradient ? (
-                  // Gradient visual indicator preview
-                  <View
-                    style={[
-                      styles.previewImage,
-                      styles.gradientIndicator,
-                      {
-                        backgroundColor:
-                          selectedGradient === 'sunset'
-                            ? '#FF4B2B'
-                            : selectedGradient === 'cyberpunk'
-                            ? '#00F2FE'
-                            : selectedGradient === 'carbon'
-                            ? '#3A3D40'
-                            : '#38ef7d',
-                      },
-                    ]}
-                  >
-                    <Text style={styles.indicatorText}>
-                      Gradient Background: {selectedGradient.toUpperCase()}
+            ) : (
+              <View style={{ flex: 1 }}>
+                {/* Stats Dashboard Grid */}
+                <View style={styles.statsGrid}>
+                  <View style={styles.statBox}>
+                    <Text style={styles.statLabel}>DISTANCE</Text>
+                    <Text style={[styles.statValue, { color: '#FF5722' }]}>
+                      {stats?.distanceKm || '0.0'} km
                     </Text>
                   </View>
-                ) : (
-                  <View style={styles.emptyPreviewBox}>
-                    <Text style={styles.emptyPreviewText}>
-                      Snap a ride photo or select a premium preset gradient template below
+                  <View style={styles.statBox}>
+                    <Text style={styles.statLabel}>DURATION</Text>
+                    <Text style={[styles.statValue, { color: colors.textPrimary }]}>
+                      {stats?.durationFormatted || '0s'}
                     </Text>
                   </View>
-                )}
-              </View>
+                  <View style={styles.statBox}>
+                    <Text style={styles.statLabel}>AVG SPEED</Text>
+                    <Text style={[styles.statValue, { color: colors.textPrimary }]}>
+                      {stats?.avgSpeedKmH || '0.0'} km/h
+                    </Text>
+                  </View>
+                </View>
 
-              {/* Camera Trigger */}
-              <TouchableOpacity
-                style={styles.cameraTriggerBtn}
-                onPress={requestCameraPermission}
-              >
-                <Text style={styles.cameraTriggerText}>📸 SNAP ACTIVE PHOTO</Text>
-              </TouchableOpacity>
+                {/* Sub-stats (Top Speed & Cost) */}
+                <View style={[styles.subStatsRow, { borderTopWidth: 1, borderBottomWidth: 1, borderColor: colors.border }]}>
+                  <View>
+                    <Text style={[styles.subStatsLabel, { color: colors.textSecondary }]}>Top Speed</Text>
+                    <Text style={[styles.subStatsValue, { color: colors.textPrimary }]}>
+                      🔥 {stats?.maxSpeedKmH || '0.0'} km/h
+                    </Text>
+                  </View>
+                  <View style={{ alignItems: 'flex-end' }}>
+                    <Text style={[styles.subStatsLabel, { color: colors.textSecondary }]}>Total Cost</Text>
+                    <Text style={[styles.subStatsValue, { color: '#FF5722', fontWeight: 'bold' }]}>
+                      {showCredits() ? `${ride.total_cost || 0} Credits` : `₹ ${ride.total_cost || 0}`}
+                    </Text>
+                  </View>
+                </View>
 
-              {/* Preset Gradients Template Selector */}
-              <Text style={styles.selectorLabel}>PREMIUM GRADIENT TEMPLATES</Text>
-              <View style={styles.gradientRow}>
-                {([
-                  { key: 'sunset', label: 'Sunset Flame' },
-                  { key: 'cyberpunk', label: 'Neon Cyber' },
-                  { key: 'carbon', label: 'Carbon Sleek' },
-                  { key: 'forest', label: 'Forest Green' },
-                ] as const).map(item => (
+                {/* Svg route geometry map shape */}
+                {renderSvgPath()}
+
+                {/* Share / Overlay button */}
+                <View style={styles.footer}>
                   <TouchableOpacity
-                    key={item.key}
-                    style={[
-                      styles.gradientBtn,
-                      selectedGradient === item.key && styles.gradientBtnActive,
-                    ]}
-                    onPress={() => {
-                      setSelectedGradient(item.key);
-                      setCapturedPhotoUri(null);
-                    }}
+                    style={styles.shareAccentButton}
+                    onPress={() => setIsEditorOpen(true)}
                   >
-                    <Text
-                      style={[
-                        styles.gradientBtnText,
-                        selectedGradient === item.key && styles.gradientBtnTextActive,
-                      ]}
-                    >
-                      {item.label}
-                    </Text>
+                    <Text style={styles.shareAccentText}>📸 SHARE JOURNEY GRAPHIC</Text>
                   </TouchableOpacity>
-                ))}
+                </View>
               </View>
+            )}
+          </View>
 
-              {/* Compile Action buttons */}
-              <View style={styles.editorFooterRow}>
-                <TouchableOpacity
-                  style={styles.editorCancelBtn}
-                  onPress={() => setIsEditorOpen(false)}
-                >
-                  <Text style={styles.editorCancelText}>Cancel</Text>
-                </TouchableOpacity>
+          {/* SUB-MODAL: PREMIUM WATERMARK SHARE CARD DESIGNER */}
+          <Modal
+            isVisible={isEditorOpen}
+            onBackdropPress={() => {
+              if (!cameraActive) setIsEditorOpen(false);
+            }}
+            onBackButtonPress={() => setIsEditorOpen(false)}
+            style={styles.subModal}
+          >
+            <View style={styles.editorContent}>
+              {cameraActive && device ? (
+                // Full camera viewfinder overlay
+                <View style={StyleSheet.absoluteFillObject}>
+                  <Camera
+                    ref={cameraRef}
+                    style={StyleSheet.absoluteFillObject}
+                    device={device}
+                    isActive={true}
+                    photo={true}
+                  />
+                  {/* Camera snap controls overlay */}
+                  <View style={styles.cameraControls}>
+                    <TouchableOpacity
+                      style={styles.closeCameraBtn}
+                      onPress={() => setCameraActive(false)}
+                    >
+                      <Text style={styles.cameraBtnText}>✕ Close</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.snapCircle} onPress={takePhoto} />
+                    <View style={{ width: 60 }} />
+                  </View>
+                </View>
+              ) : (
+                <View style={styles.designerInner}>
+                  <Text style={styles.editorHeading}>STATS WATERMARK EDITOR</Text>
 
-                <TouchableOpacity
-                  style={[
-                    styles.editorSubmitBtn,
-                    (!capturedPhotoUri && !selectedGradient) && styles.editorSubmitBtnDisabled,
-                  ]}
-                  disabled={!capturedPhotoUri && !selectedGradient}
-                  onPress={startComposting}
-                >
-                  <Text style={styles.editorSubmitText}>COMPOSE CARD</Text>
-                </TouchableOpacity>
-              </View>
+                  {/* Photo View / Backdrop Preview */}
+                  <View style={styles.previewBox}>
+                    {capturedPhotoUri ? (
+                      <Image source={{ uri: capturedPhotoUri }} style={styles.previewImage} />
+                    ) : selectedGradient ? (
+                      // Gradient visual indicator preview
+                      <View
+                        style={[
+                          styles.previewImage,
+                          styles.gradientIndicator,
+                          {
+                            backgroundColor:
+                              selectedGradient === 'sunset'
+                                ? '#FF4B2B'
+                                : selectedGradient === 'cyberpunk'
+                                  ? '#00F2FE'
+                                  : selectedGradient === 'carbon'
+                                    ? '#3A3D40'
+                                    : '#38ef7d',
+                          },
+                        ]}
+                      >
+                        <Text style={styles.indicatorText}>
+                          Gradient Background: {selectedGradient.toUpperCase()}
+                        </Text>
+                      </View>
+                    ) : (
+                      <View style={styles.emptyPreviewBox}>
+                        <Text style={styles.emptyPreviewText}>
+                          Snap a ride photo or select a premium preset gradient template below
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+
+                  {/* Camera Trigger */}
+                  <TouchableOpacity
+                    style={styles.cameraTriggerBtn}
+                    onPress={requestCameraPermission}
+                  >
+                    <Text style={styles.cameraTriggerText}>📸 SNAP ACTIVE PHOTO</Text>
+                  </TouchableOpacity>
+
+                  {/* Preset Gradients Template Selector */}
+                  <Text style={styles.selectorLabel}>PREMIUM GRADIENT TEMPLATES</Text>
+                  <View style={styles.gradientRow}>
+                    {([
+                      { key: 'sunset', label: 'Sunset Flame' },
+                      { key: 'cyberpunk', label: 'Neon Cyber' },
+                      { key: 'carbon', label: 'Carbon Sleek' },
+                      { key: 'forest', label: 'Forest Green' },
+                    ] as const).map(item => (
+                      <TouchableOpacity
+                        key={item.key}
+                        style={[
+                          styles.gradientBtn,
+                          selectedGradient === item.key && styles.gradientBtnActive,
+                        ]}
+                        onPress={() => {
+                          setSelectedGradient(item.key);
+                          setCapturedPhotoUri(null);
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.gradientBtnText,
+                            selectedGradient === item.key && styles.gradientBtnTextActive,
+                          ]}
+                        >
+                          {item.label}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+
+                  {/* Compile Action buttons */}
+                  <View style={styles.editorFooterRow}>
+                    <TouchableOpacity
+                      style={styles.editorCancelBtn}
+                      onPress={() => setIsEditorOpen(false)}
+                    >
+                      <Text style={styles.editorCancelText}>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.editorSubmitBtn,
+                        (!capturedPhotoUri && !selectedGradient) && styles.editorSubmitBtnDisabled,
+                      ]}
+                      disabled={!capturedPhotoUri && !selectedGradient}
+                      onPress={startComposting}
+                    >
+                      <Text style={styles.editorSubmitText}>COMPOSE CARD</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+
+              {/* Hidden Composting engine */}
+              {engineTrigger && stats && (
+                <WatermarkCanvasEngine
+                  imageUri={capturedPhotoUri || undefined}
+                  gradientName={selectedGradient}
+                  stats={stats}
+                  coordinates={simplifiedPoints}
+                  onComplete={handleCompostSuccess}
+                  onError={handleCompostError}
+                />
+              )}
+
+              {/* Loading Glassmorphic Overlay */}
+              {isComposting && (
+                <View style={styles.loadingOverlay}>
+                  <ActivityIndicator size="large" color="#FF5722" />
+                  <Text style={styles.loadingOverlayText}>Composting premium stats card...</Text>
+                </View>
+              )}
+
+              {/* Share Preview Overlay Sub-Modal */}
+              {compostOutputBase64 && (
+                <View style={styles.compostPreviewOverlay}>
+                  <Text style={styles.previewHeading}>YOUR SHAREABLE STAT CARD</Text>
+                  <Image source={{ uri: compostOutputBase64 }} style={styles.compostResultImage} />
+
+                  <View style={styles.previewActionsRow}>
+                    <TouchableOpacity
+                      style={styles.previewBackBtn}
+                      onPress={() => setCompostOutputBase64(null)}
+                    >
+                      <Text style={styles.previewBackText}>Re-Edit</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.previewShareBtn}
+                      onPress={shareGeneratedCard}
+                    >
+                      <Text style={styles.previewShareText}>🔗 DOWNLOAD & SHARE</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
             </View>
-          )}
-
-          {/* Hidden Composting engine */}
-          {engineTrigger && stats && (
-            <WatermarkCanvasEngine
-              imageUri={capturedPhotoUri || undefined}
-              gradientName={selectedGradient}
-              stats={stats}
-              coordinates={simplifiedPoints}
-              onComplete={handleCompostSuccess}
-              onError={handleCompostError}
-            />
-          )}
-
-          {/* Loading Glassmorphic Overlay */}
-          {isComposting && (
-            <View style={styles.loadingOverlay}>
-              <ActivityIndicator size="large" color="#FF5722" />
-              <Text style={styles.loadingOverlayText}>Composting premium stats card...</Text>
-            </View>
-          )}
-
-          {/* Share Preview Overlay Sub-Modal */}
-          {compostOutputBase64 && (
-            <View style={styles.compostPreviewOverlay}>
-              <Text style={styles.previewHeading}>YOUR SHAREABLE STAT CARD</Text>
-              <Image source={{ uri: compostOutputBase64 }} style={styles.compostResultImage} />
-
-              <View style={styles.previewActionsRow}>
-                <TouchableOpacity
-                  style={styles.previewBackBtn}
-                  onPress={() => setCompostOutputBase64(null)}
-                >
-                  <Text style={styles.previewBackText}>Re-Edit</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.previewShareBtn}
-                  onPress={shareGeneratedCard}
-                >
-                  <Text style={styles.previewShareText}>🔗 DOWNLOAD & SHARE</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-        </View>
-      </Modal>
+          </Modal>
+        </>
+      ) : (
+        <View />
+      )}
     </Modal>
   );
 };

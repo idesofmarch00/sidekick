@@ -16,7 +16,8 @@ type Props = {
   customStyles?: TextStyle;
 };
 
-const {theme} = useThemeStore.getState();
+// Static typography metrics (don't change between themes)
+const {theme: initialTheme} = useThemeStore.getState();
 
 const P1: React.FC<Props> = ({
   children,
@@ -24,12 +25,14 @@ const P1: React.FC<Props> = ({
   customStyles,
   weight = '500',
 }) => {
+  const {colors} = useThemeStore(state => state.theme);
+
   return (
     <Text
       style={[
         styles.textBase,
         {
-          color: theme.colors[textColor],
+          color: colors[textColor],
           fontWeight: weight,
         },
         customStyles,
@@ -41,7 +44,7 @@ const P1: React.FC<Props> = ({
 
 const styles = ScaledSheet.create({
   textBase: {
-    ...theme.typography.skP1,
+    ...initialTheme.typography.skP1,
   },
 });
 

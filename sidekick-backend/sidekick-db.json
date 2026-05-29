@@ -26,7 +26,7 @@
       "latitude": 28.6974,
       "longitude": 77.2023,
       "organization_id": "org-default-uuid-1111",
-      "created_at": "2026-05-22T17:44:56.560Z"
+      "created_at": "2026-05-16T08:00:00.000Z"
     },
     {
       "id": "hub-2",
@@ -34,7 +34,7 @@
       "latitude": 28.6816,
       "longitude": 77.2016,
       "organization_id": "org-default-uuid-1111",
-      "created_at": "2026-05-22T17:44:56.560Z"
+      "created_at": "2026-05-16T08:00:00.000Z"
     },
     {
       "id": "hub-3",
@@ -42,7 +42,7 @@
       "latitude": 28.584,
       "longitude": 77.163,
       "organization_id": "org-default-uuid-1111",
-      "created_at": "2026-05-22T17:44:56.560Z"
+      "created_at": "2026-05-16T08:00:00.000Z"
     },
     {
       "id": "hub-4",
@@ -50,7 +50,7 @@
       "latitude": 28.5873,
       "longitude": 77.1645,
       "organization_id": "org-default-uuid-1111",
-      "created_at": "2026-05-22T17:44:56.560Z"
+      "created_at": "2026-05-16T08:00:00.000Z"
     }
   ],
   "scooters": [
@@ -91,17 +91,251 @@
       "hub_id": "hub-4"
     }
   ],
-  "ride_details": [],
-  "ride_steps": [],
+  "ride_details": [
+    {
+      "id": "ride-morning-commute-1",
+      "user_id": "6383b5a1-a742-42f1-84d4-5c51926b9eac",
+      "scooter_id": "scooter-1",
+      "start_hub_id": "hub-1",
+      "end_hub_id": "hub-2",
+      "start_time": "2026-05-17T03:15:00.000Z",
+      "end_time": "2026-05-17T03:27:00.000Z",
+      "total_cost": 45,
+      "total_distance": 2.1,
+      "cost_type": "per_minute",
+      "created_at": "2026-05-17T03:15:00.000Z",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "ride-south-campus-quick-1",
+      "user_id": "6383b5a1-a742-42f1-84d4-5c51926b9eac",
+      "scooter_id": "scooter-3",
+      "start_hub_id": "hub-3",
+      "end_hub_id": "hub-4",
+      "start_time": "2026-05-19T09:30:00.000Z",
+      "end_time": "2026-05-19T09:38:00.000Z",
+      "total_cost": 30,
+      "total_distance": 1.4,
+      "cost_type": "per_minute",
+      "created_at": "2026-05-19T09:30:00.000Z",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "ride-cross-campus-long-1",
+      "user_id": "6383b5a1-a742-42f1-84d4-5c51926b9eac",
+      "scooter_id": "scooter-2",
+      "start_hub_id": "hub-2",
+      "end_hub_id": "hub-4",
+      "start_time": "2026-05-21T04:00:00.000Z",
+      "end_time": "2026-05-21T04:42:00.000Z",
+      "total_cost": 250,
+      "total_distance": 15.6,
+      "cost_type": "per_minute",
+      "created_at": "2026-05-21T04:00:00.000Z",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "ride-evening-return-1",
+      "user_id": "6383b5a1-a742-42f1-84d4-5c51926b9eac",
+      "scooter_id": "scooter-2",
+      "start_hub_id": "hub-2",
+      "end_hub_id": "hub-1",
+      "start_time": "2026-05-23T13:00:00.000Z",
+      "end_time": "2026-05-23T13:10:00.000Z",
+      "total_cost": 35,
+      "total_distance": 1.8,
+      "cost_type": "per_minute",
+      "created_at": "2026-05-23T13:00:00.000Z",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "ride-weekend-explorer-1",
+      "user_id": "6383b5a1-a742-42f1-84d4-5c51926b9eac",
+      "scooter_id": "scooter-1",
+      "start_hub_id": "hub-1",
+      "end_hub_id": "hub-3",
+      "start_time": "2026-05-25T05:30:00.000Z",
+      "end_time": "2026-05-25T06:02:00.000Z",
+      "total_cost": 190,
+      "total_distance": 8.2,
+      "cost_type": "per_minute",
+      "created_at": "2026-05-25T05:30:00.000Z",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "ride-quick-errand-1",
+      "user_id": "6383b5a1-a742-42f1-84d4-5c51926b9eac",
+      "scooter_id": "scooter-4",
+      "start_hub_id": "hub-4",
+      "end_hub_id": "hub-3",
+      "start_time": "2026-05-27T11:15:00.000Z",
+      "end_time": "2026-05-27T11:20:00.000Z",
+      "total_cost": 15,
+      "total_distance": 0.8,
+      "cost_type": "per_minute",
+      "created_at": "2026-05-27T11:15:00.000Z",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "ride-night-cruise-1",
+      "user_id": "6383b5a1-a742-42f1-84d4-5c51926b9eac",
+      "scooter_id": "scooter-3",
+      "start_hub_id": "hub-3",
+      "end_hub_id": "hub-1",
+      "start_time": "2026-05-29T16:30:00.000Z",
+      "end_time": "2026-05-29T17:08:00.000Z",
+      "total_cost": 300,
+      "total_distance": 12.4,
+      "cost_type": "per_minute",
+      "created_at": "2026-05-29T16:30:00.000Z",
+      "status": "COMPLETED"
+    }
+  ],
+  "ride_steps": [
+    {
+      "id": "step-morning-commute-start",
+      "ride_details_id": "ride-morning-commute-1",
+      "steps": "RIDE_CREATED",
+      "created_at": "2026-05-17T03:15:00.000Z"
+    },
+    {
+      "id": "step-morning-commute-end",
+      "ride_details_id": "ride-morning-commute-1",
+      "steps": "RIDE_ENDED",
+      "created_at": "2026-05-17T03:27:00.000Z"
+    },
+    {
+      "id": "step-south-campus-quick-start",
+      "ride_details_id": "ride-south-campus-quick-1",
+      "steps": "RIDE_CREATED",
+      "created_at": "2026-05-19T09:30:00.000Z"
+    },
+    {
+      "id": "step-south-campus-quick-end",
+      "ride_details_id": "ride-south-campus-quick-1",
+      "steps": "RIDE_ENDED",
+      "created_at": "2026-05-19T09:38:00.000Z"
+    },
+    {
+      "id": "step-cross-campus-long-start",
+      "ride_details_id": "ride-cross-campus-long-1",
+      "steps": "RIDE_CREATED",
+      "created_at": "2026-05-21T04:00:00.000Z"
+    },
+    {
+      "id": "step-cross-campus-long-end",
+      "ride_details_id": "ride-cross-campus-long-1",
+      "steps": "RIDE_ENDED",
+      "created_at": "2026-05-21T04:42:00.000Z"
+    },
+    {
+      "id": "step-evening-return-start",
+      "ride_details_id": "ride-evening-return-1",
+      "steps": "RIDE_CREATED",
+      "created_at": "2026-05-23T13:00:00.000Z"
+    },
+    {
+      "id": "step-evening-return-end",
+      "ride_details_id": "ride-evening-return-1",
+      "steps": "RIDE_ENDED",
+      "created_at": "2026-05-23T13:10:00.000Z"
+    },
+    {
+      "id": "step-weekend-explorer-start",
+      "ride_details_id": "ride-weekend-explorer-1",
+      "steps": "RIDE_CREATED",
+      "created_at": "2026-05-25T05:30:00.000Z"
+    },
+    {
+      "id": "step-weekend-explorer-end",
+      "ride_details_id": "ride-weekend-explorer-1",
+      "steps": "RIDE_ENDED",
+      "created_at": "2026-05-25T06:02:00.000Z"
+    },
+    {
+      "id": "step-quick-errand-start",
+      "ride_details_id": "ride-quick-errand-1",
+      "steps": "RIDE_CREATED",
+      "created_at": "2026-05-27T11:15:00.000Z"
+    },
+    {
+      "id": "step-quick-errand-end",
+      "ride_details_id": "ride-quick-errand-1",
+      "steps": "RIDE_ENDED",
+      "created_at": "2026-05-27T11:20:00.000Z"
+    },
+    {
+      "id": "step-night-cruise-start",
+      "ride_details_id": "ride-night-cruise-1",
+      "steps": "RIDE_CREATED",
+      "created_at": "2026-05-29T16:30:00.000Z"
+    },
+    {
+      "id": "step-night-cruise-end",
+      "ride_details_id": "ride-night-cruise-1",
+      "steps": "RIDE_ENDED",
+      "created_at": "2026-05-29T17:08:00.000Z"
+    }
+  ],
   "wallets": [
     {
       "id": "wallet-default-uuid-2222",
-      "balance": 500,
-      "security_deposit": 200,
-      "created_at": "2026-05-22T17:44:56.560Z",
+      "balance": 5000,
+      "security_deposit": 500,
+      "created_at": "2026-05-16T08:00:00.000Z",
       "org_id": "org-default-uuid-1111"
     }
   ],
-  "transactions": [],
+  "transactions": [
+    {
+      "id": "tx-morning-commute-1",
+      "wallet_id": "wallet-default-uuid-2222",
+      "ride_id": "ride-morning-commute-1",
+      "amount": 45,
+      "created_at": "2026-05-17T03:27:00.000Z"
+    },
+    {
+      "id": "tx-south-campus-quick-1",
+      "wallet_id": "wallet-default-uuid-2222",
+      "ride_id": "ride-south-campus-quick-1",
+      "amount": 30,
+      "created_at": "2026-05-19T09:38:00.000Z"
+    },
+    {
+      "id": "tx-cross-campus-long-1",
+      "wallet_id": "wallet-default-uuid-2222",
+      "ride_id": "ride-cross-campus-long-1",
+      "amount": 250,
+      "created_at": "2026-05-21T04:42:00.000Z"
+    },
+    {
+      "id": "tx-evening-return-1",
+      "wallet_id": "wallet-default-uuid-2222",
+      "ride_id": "ride-evening-return-1",
+      "amount": 35,
+      "created_at": "2026-05-23T13:10:00.000Z"
+    },
+    {
+      "id": "tx-weekend-explorer-1",
+      "wallet_id": "wallet-default-uuid-2222",
+      "ride_id": "ride-weekend-explorer-1",
+      "amount": 190,
+      "created_at": "2026-05-25T06:02:00.000Z"
+    },
+    {
+      "id": "tx-quick-errand-1",
+      "wallet_id": "wallet-default-uuid-2222",
+      "ride_id": "ride-quick-errand-1",
+      "amount": 15,
+      "created_at": "2026-05-27T11:20:00.000Z"
+    },
+    {
+      "id": "tx-night-cruise-1",
+      "wallet_id": "wallet-default-uuid-2222",
+      "ride_id": "ride-night-cruise-1",
+      "amount": 300,
+      "created_at": "2026-05-29T17:08:00.000Z"
+    }
+  ],
   "ride_coordinates": []
 }

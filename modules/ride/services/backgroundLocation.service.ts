@@ -74,6 +74,8 @@ class BackgroundLocationService {
   private watchId: number | null = null;
   private activeRideId: string | null = null;
   private kalmanFilter = new GPSKalmanFilter(3.0); // 3m/s noise threshold
+  private simulationInterval: NodeJS.Timeout | null = null;
+  private simulationIndex = 0;
 
   /**
    * Starts tracking coordinates in the foreground/background for a specific ride.
@@ -110,6 +112,9 @@ class BackgroundLocationService {
 
     // If on native mobile, start background worker threads to keep JS thread active.
     this.enableNativeBackgroundService();
+
+    // Spawns automatic ride coordinate simulation for testing/simulators
+    this.startRideSimulation();
   }
 
   /**
@@ -122,8 +127,84 @@ class BackgroundLocationService {
       console.info(`[BackgroundLocationService] Stopped tracking for ride: ${this.activeRideId}`);
     }
 
+    this.stopRideSimulation();
     this.activeRideId = null;
     this.disableNativeBackgroundService();
+  }
+
+  /**
+   * Automatic route telemetry simulation.
+   * Generates raw GPS coordinates along Maurice Nagar -> Kamla Nagar route,
+   * adds dynamic jitter/noise, passes them through the active Kalman Filter,
+   * and saves the smoothed points to demonstrate filter resilience.
+   */
+  private startRideSimulation() {
+    this.stopRideSimulation();
+    this.simulationIndex = 0;
+
+    const SIMULATED_PATH = [
+      { latitude: 28.6974, longitude: 77.2023 },
+      { latitude: 28.6967, longitude: 77.2018 },
+      { latitude: 28.6958, longitude: 77.2010 },
+      { latitude: 28.6946, longitude: 77.2003 },
+      { latitude: 28.6932, longitude: 77.1997 },
+      { latitude: 28.6915, longitude: 77.1994 },
+      { latitude: 28.6895, longitude: 77.1996 },
+      { latitude: 28.6876, longitude: 77.2000 },
+      { latitude: 28.6855, longitude: 77.2006 },
+      { latitude: 28.6838, longitude: 77.2011 },
+      { latitude: 28.6824, longitude: 77.2014 },
+      { latitude: 28.6816, longitude: 77.2016 }
+    ];
+
+    console.info('[BackgroundLocationService] Spinning up automatic ride route telemetry simulator loop...');
+
+    this.simulationInterval = setInterval(async () => {
+      if (!this.activeRideId) return;
+
+      // Select point from the path
+      const basePoint = SIMULATED_PATH[this.simulationIndex % SIMULATED_PATH.length];
+      
+      // Inject realistic random GPS noise/jitter to demonstrate Kalman Filter smoothing
+      const jitterLat = (Math.random() - 0.5) * 0.0002; // ~20 meters
+      const jitterLng = (Math.random() - 0.5) * 0.0002;
+      const rawLat = basePoint.latitude + jitterLat;
+      const rawLng = basePoint.longitude + jitterLng;
+
+      const accuracy = 15; // Simulated GPS accuracy in meters
+      const timestamp = Date.now();
+
+      // Process raw noisy coordinate through Kalman Filter
+      const smoothed = this.kalmanFilter.process(rawLat, rawLng, accuracy, timestamp);
+
+      const localCoord: LocalCoordinate = {
+        id: `sim_${this.activeRideId}_${timestamp}`,
+        ride_id: this.activeRideId,
+        latitude: smoothed.latitude,
+        longitude: smoothed.longitude,
+        altitude: 240 + Math.random() * 5,
+        speed: 5 + Math.random() * 2, // ~18-25 km/h
+        accuracy,
+        timestamp,
+        sync_status: 'PENDING'
+      };
+
+      try {
+        await sqliteService.saveCoordinate(localCoord);
+        console.info(`[SIMULATION] Logged Smoothed GPS: (${smoothed.latitude.toFixed(5)}, ${smoothed.longitude.toFixed(5)}) [Raw Noisy: (${rawLat.toFixed(5)}, ${rawLng.toFixed(5)})] for ride: ${this.activeRideId}`);
+      } catch (err) {
+        console.error('[SIMULATION] Failed to save simulated coordinate:', err);
+      }
+
+      this.simulationIndex++;
+    }, 3000); // Push every 3 seconds for fast simulator updates
+  }
+
+  private stopRideSimulation() {
+    if (this.simulationInterval) {
+      clearInterval(this.simulationInterval);
+      this.simulationInterval = null;
+    }
   }
 
   /**

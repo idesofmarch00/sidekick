@@ -1,8 +1,8 @@
-import React, {useCallback, useEffect} from 'react';
-import {View} from 'react-native';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ScaledSheet} from 'react-native-size-matters';
+import React, { useCallback, useEffect } from 'react';
+import { View } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScaledSheet } from 'react-native-size-matters';
 
 // components
 import WalletCard from '@/modules/wallet/components/WalletCard';
@@ -11,23 +11,22 @@ import TransactionList from '@/modules/wallet/components/TransactionList';
 import AddFundsButton from '@/modules/wallet/components/AddFundsButton';
 
 // store
-import {useRideStore, useThemeStore, useUserStore} from '@/globalStore';
-import {Divider, H3} from '@/components';
+import { useRideStore, useThemeStore, useUserStore } from '@/globalStore';
+import { Divider, H3 } from '@/components';
 
 // components
 import { RideJourneyDetailsModal } from '@/modules/ride/components';
 
 // services
-import {RideService, WalletService} from '@/globalService';
-
-const {colors} = useThemeStore.getState().theme;
+import { RideService, WalletService } from '@/globalService';
 
 const WalletScreen: React.FC = () => {
   const [selectedRideForModal, setSelectedRideForModal] = React.useState<any | null>(null);
   const navigation = useNavigation();
 
-  const {rideHistory} = useRideStore();
-  const {user} = useUserStore();
+  const { rideHistory } = useRideStore();
+  const { user } = useUserStore();
+  const { colors } = useThemeStore(state => state.theme);
 
   // Handle withdraw button press
   const handleWithdraw = () => {
@@ -37,7 +36,7 @@ const WalletScreen: React.FC = () => {
   // Handle add funds button press
   const handleAddFunds = () => {
     // @ts-ignore
-    navigation.navigate('walletNavigator', {screen: 'AddFundsScreen'});
+    navigation.navigate('walletNavigator', { screen: 'AddFundsScreen' });
   };
 
   useEffect(() => {
@@ -58,18 +57,18 @@ const WalletScreen: React.FC = () => {
     () => (
       <>
         <View style={styles.headerContainer}>
-          <H3 textColor="textSecondary" customStyles={{textAlign: 'center'}}>
+          <H3 textColor="textSecondary" customStyles={{ textAlign: 'center' }}>
             Recent Rides
           </H3>
         </View>
-        <View style={styles.dashedBorder} />
+        <View style={[styles.dashedBorder, { borderColor: colors.textSecondary }]} />
       </>
     ),
-    [],
+    [colors],
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.white }]}>
       <View style={styles.content}>
         {/* Wallet balance card */}
         <WalletCard testID="wallet-balance-card" />
@@ -113,7 +112,6 @@ const styles = ScaledSheet.create({
     flex: 1,
     paddingHorizontal: '23@ms',
     justifyContent: 'center',
-    backgroundColor: colors.white,
   },
   content: {
     flex: 1,
@@ -142,7 +140,6 @@ const styles = ScaledSheet.create({
     width: '100%',
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor: colors.textSecondary,
   },
   headerText: {
     fontWeight: '600',

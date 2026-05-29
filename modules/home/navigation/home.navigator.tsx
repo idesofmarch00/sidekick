@@ -16,16 +16,19 @@ import ProfileIconFilled from '../assets/profileIconFilled.svg';
 import {ScaledSheet} from 'react-native-size-matters';
 import {Platform} from 'react-native';
 
-const ProfileTabBar = ({focused}: {focused: boolean}) => {
-  return focused ? <ProfileIconFilled /> : <ProfileIcon />;
+// theme store
+import {useThemeStore} from '@/globalStore';
+
+const ProfileTabBar = ({focused, color}: {focused: boolean; color: string}) => {
+  return focused ? <ProfileIconFilled stroke={color} /> : <ProfileIcon stroke={color} />;
 };
 
-const WalletTabBar = ({focused}: {focused: boolean}) => {
-  return focused ? <WalletIconFilled /> : <WalletIcon />;
+const WalletTabBar = ({focused, color}: {focused: boolean; color: string}) => {
+  return focused ? <WalletIconFilled stroke={color} /> : <WalletIcon stroke={color} />;
 };
 
-const RentTabBar = ({focused}: {focused: boolean}) => {
-  return focused ? <RentScooterIconFilled /> : <RentScooterIcon />;
+const RentTabBar = ({focused, color}: {focused: boolean; color: string}) => {
+  return focused ? <RentScooterIconFilled stroke={color} /> : <RentScooterIcon stroke={color} />;
 };
 
 const styles = ScaledSheet.create({
@@ -40,15 +43,27 @@ const styles = ScaledSheet.create({
 
 const HomeNavigator = createBottomTabNavigator({
   initialRouteName: 'rent',
-  screenOptions: {
-    headerShown: false,
-    tabBarStyle: styles.tabBar,
+  screenOptions: () => {
+    const {colors} = useThemeStore(state => state.theme);
+    return {
+      headerShown: false,
+      tabBarStyle: [
+        styles.tabBar,
+        {
+          backgroundColor: colors.white,
+          borderTopColor: colors.lightGray,
+          borderTopWidth: 1,
+        },
+      ],
+      tabBarActiveTintColor: colors.primary,
+      tabBarInactiveTintColor: colors.textSecondary,
+    };
   },
   screens: {
     wallet: {
       screen: WalletScreen,
       options: {
-        tabBarIcon: ({focused}) => <WalletTabBar focused={focused} />,
+        tabBarIcon: ({focused, color}) => <WalletTabBar focused={focused} color={color} />,
         tabBarLabel: 'Wallet',
         tabBarButton: props => (
           <Pressable {...props} android_ripple={{color: 'transparent'}} />
@@ -58,7 +73,7 @@ const HomeNavigator = createBottomTabNavigator({
     rent: {
       screen: RentScreen,
       options: {
-        tabBarIcon: ({focused}) => <RentTabBar focused={focused} />,
+        tabBarIcon: ({focused, color}) => <RentTabBar focused={focused} color={color} />,
         tabBarLabel: 'Rent',
         tabBarButton: props => (
           <Pressable {...props} android_ripple={{color: 'transparent'}} />
@@ -68,7 +83,7 @@ const HomeNavigator = createBottomTabNavigator({
     profile: {
       screen: UserDetails,
       options: {
-        tabBarIcon: ({focused}) => <ProfileTabBar focused={focused} />,
+        tabBarIcon: ({focused, color}) => <ProfileTabBar focused={focused} color={color} />,
         tabBarLabel: 'Profile',
         tabBarButton: props => (
           <Pressable {...props} android_ripple={{color: 'transparent'}} />

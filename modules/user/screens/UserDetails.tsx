@@ -28,14 +28,14 @@ import {GlobalModal, showToast} from '@/components';
 import NeedHelp from '@/modules/user/components/NeedHelp';
 import DeleteAccount from '@/modules/user/components/DeleteAccount';
 
-const {colors} = useThemeStore.getState().theme;
-
 const UserDetails: React.FC = () => {
   const {completedRides} = useRideStore();
   const {user} = useUserStore();
   const navigation = useNavigation();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const {openModal, setModalComponent, closeBottomSheet} = useGlobalStore();
+  const {colors} = useThemeStore(state => state.theme);
+  const {isDark, actions} = useThemeStore();
 
   // User data
   const userData = user;
@@ -66,6 +66,17 @@ const UserDetails: React.FC = () => {
       },
       onPress: () => {}, // No-op since the switch handles the interaction
       testID: 'notifications-button',
+    },
+    {
+      icon: Notification,
+      label: 'Dark Mode',
+      controlType: 'switch' as const,
+      isToggled: isDark,
+      onToggle: value => {
+        actions.setTheme(value);
+      },
+      onPress: () => {},
+      testID: 'dark-mode-button',
     },
     {
       icon: Help,
@@ -133,8 +144,8 @@ const UserDetails: React.FC = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
+    <SafeAreaView style={[styles.safeArea, {backgroundColor: colors.appBaseBg}]}>
+      <View style={[styles.container, {backgroundColor: colors.white}]}>
         <ProfileCard
           fullName={userData?.full_name as string}
           company={
@@ -165,11 +176,9 @@ const UserDetails: React.FC = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.appBaseBg,
   },
   container: {
     flex: 1,
-    backgroundColor: colors.white,
   },
   profileCard: {
     marginBottom: 16,

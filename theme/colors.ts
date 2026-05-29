@@ -35,13 +35,18 @@ export enum ColorSelectorEnum {
 export type ColorSelector = keyof typeof ColorSelectorEnum;
 
 export const darkColors: ColorPalette = {
-  ...lightColors,
-  // neutral: {
-  //   0: '#FFFFFF', // Black
-  //   100: '#A9A9A9', // Dark Gray
-  //   200: '#D3D3D3', // Light Gray
-  //   900: '#FFFFFF', // White
-  // },
+  primary: '#0DF073', // Rich, vibrant premium green (slightly softer than neon)
+  secondary: '#72FFB1', // Soft pale green
+  highlight: '#4382FF', // Beautiful slate-blue accent
+  error: '#F84848', // Coral red for errors
+  alert: '#2C1A20', // Very soft dark ruby background for alerts
+  lightGray: '#24283B', // Soft grey-blue for borders/subsurfaces
+  textPrimary: '#E2E5F0', // Soft off-white text to prevent eye-strain
+  textSecondary: '#7A849E', // Highly legible blue-grey secondary text
+  blueFade: '#1B2032', // Rich subtle deep blue tint
+  redFade: '#25181D', // Rich subtle deep red tint
+  white: '#1A1D29', // Premium deep indigo-grey card surface
+  appBaseBg: '#12141C', // Luxurious dark navy-slate background (super soothing)
 };
 
 // export const lightColors: ColorPalette = {

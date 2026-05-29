@@ -23,8 +23,8 @@ type ThemeState = {
 export const themeStoreBase = create<ThemeState>()(
   persist(
     (set, get) => ({
-      theme: lightTheme,
-      isDark: false,
+      theme: darkTheme,
+      isDark: true,
       systemTheme: Appearance.getColorScheme() || 'light',
       actions: {
         toggleTheme: () => {
@@ -53,6 +53,11 @@ export const themeStoreBase = create<ThemeState>()(
       name: 'theme-storage',
       storage: zustandMmkvStorage,
       partialize: state => ({isDark: state.isDark}),
+      onRehydrateStorage: () => state => {
+        if (state) {
+          state.theme = state.isDark ? darkTheme : lightTheme;
+        }
+      },
     },
   ),
 );

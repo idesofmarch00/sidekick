@@ -24,10 +24,6 @@ import {RideService} from '@/globalService';
 import rideStorage from '../storage';
 import {Ride_Step_Enum} from '@/generated/graphql';
 
-const {
-  theme: {colors},
-} = useThemeStore.getState();
-
 const RideDetails: React.FC = () => {
   const currentRideId = rideStorage.getString('currentRideId');
 
@@ -44,6 +40,7 @@ const RideDetails: React.FC = () => {
 
   const latitude = useLocationStore(state => state.latitude);
   const longitude = useLocationStore(state => state.longitude);
+  const {colors} = useThemeStore(state => state.theme);
 
   // Convert seconds into mm:ss format
   const formatTime = (totalSeconds: number) => {
@@ -71,7 +68,7 @@ const RideDetails: React.FC = () => {
     <View style={{height: '100%'}}>
       {/* {selectedHub && (
         <View style={styles.targetHubWrapper}>
-          <View style={styles.targetHubContainer}>
+          <View style={[styles.targetHubContainer, {backgroundColor: colors.white, borderColor: colors.highlight}]}>
             <H2 textColor="highlight">
               {selectedHub.name || 'No Hub Selected'}
             </H2>
@@ -80,8 +77,8 @@ const RideDetails: React.FC = () => {
         </View>
       )} */}
       <Divider height={9} />
-      <View style={styles.rideDetailsContainer}>
-        <View style={styles.handle} />
+      <View style={[styles.rideDetailsContainer, {backgroundColor: colors.white, borderColor: colors.lightGray}]}>
+        <View style={[styles.handle, {backgroundColor: colors.textSecondary}]} />
         <Divider height={16} />
         <View style={{alignItems: 'center'}}>
           <H1>{formatTime(secondsElapsed)}</H1>
@@ -146,11 +143,9 @@ const styles = ScaledSheet.create({
   },
 
   targetHubContainer: {
-    backgroundColor: colors.white,
     paddingVertical: '14@vs',
     paddingHorizontal: '18@vs',
     borderWidth: 1,
-    borderColor: colors.highlight,
     borderRadius: 23,
     flexDirection: 'row',
     alignItems: 'center',
@@ -160,17 +155,14 @@ const styles = ScaledSheet.create({
   handle: {
     alignSelf: 'center',
     height: '3.4@vs',
-    backgroundColor: colors.textSecondary,
     width: '70@s',
   },
 
   rideDetailsContainer: {
-    backgroundColor: 'white',
     height: Dimensions.get('screen').height,
     borderRadius: 16,
     paddingTop: '16@vs',
     borderWidth: 1,
-    borderColor: colors.textSecondary,
   },
 
   ridingMetricsFlexContainer: {

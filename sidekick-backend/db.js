@@ -370,9 +370,25 @@ function initDb() {
   console.info('Initializing JSON relational database at:', dbFilePath);
   loadData();
 
-  // Seeding default datasets if completely empty
-  if (data.organizations.length === 0) {
-    console.info('Seeding default Sidekick database tables...');
+  // Force re-seeding if we only have the old basic seed, no completed rides, or fewer than 7 rides
+  const needsPremiumSeed = data.organizations.length === 0 || data.ride_details.length === 0 || data.ride_details.length < 7 || (data.wallets[0] && data.wallets[0].balance === 500.0);
+
+  if (needsPremiumSeed) {
+    console.info('Seeding premium default Sidekick database tables with high-fidelity rides...');
+
+    // Clear old data to start fresh
+    data = {
+      organizations: [],
+      users: [],
+      user_organizations: [],
+      hubs: [],
+      scooters: [],
+      ride_details: [],
+      ride_steps: [],
+      ride_coordinates: [],
+      wallets: [],
+      transactions: []
+    };
 
     const orgId = 'org-default-uuid-1111';
     const userId = '6383b5a1-a742-42f1-84d4-5c51926b9eac'; // Matches user ID in mock configurations
@@ -392,12 +408,12 @@ function initDb() {
     // User Organizations
     data.user_organizations.push({ user_id: userId, organization_id: orgId });
 
-    // Wallets
+    // Wallets (Bigger balance for premium demo test run!)
     data.wallets.push({
       id: walletId,
-      balance: 500.0,
-      security_deposit: 200.0,
-      created_at: new Date().toISOString(),
+      balance: 5000.0,
+      security_deposit: 500.0,
+      created_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
       org_id: orgId
     });
 
@@ -419,10 +435,59 @@ function initDb() {
     ];
     data.scooters.push(...scooters);
 
+    // ====== Seed 7 Completed Rides for S Ahmed ======
+    const now = Date.now();
+
+    // Ride 1: Morning Commute (Hub 1 → Hub 2) — 2.1km, 12 min, ₹45
+    const ride1 = { id: 'ride-morning-commute-1', start: new Date(now - 13 * 24 * 60 * 60 * 1000 + 8.25 * 60 * 60 * 1000), duration: 12, cost: 45.0, distance: 2.1, scooter: 'scooter-1', startHub: 'hub-1', endHub: 'hub-2' };
+    // Ride 2: South Campus Quick (Hub 3 → Hub 4) — 1.4km, 8 min, ₹30
+    const ride2 = { id: 'ride-south-campus-quick-1', start: new Date(now - 11 * 24 * 60 * 60 * 1000 + 15 * 60 * 60 * 1000), duration: 8, cost: 30.0, distance: 1.4, scooter: 'scooter-3', startHub: 'hub-3', endHub: 'hub-4' };
+    // Ride 3: Cross-Campus Long (Hub 2 → Hub 4) — 15.6km, 42 min, ₹250
+    const ride3 = { id: 'ride-cross-campus-long-1', start: new Date(now - 9 * 24 * 60 * 60 * 1000 + 9.5 * 60 * 60 * 1000), duration: 42, cost: 250.0, distance: 15.6, scooter: 'scooter-2', startHub: 'hub-2', endHub: 'hub-4' };
+    // Ride 4: Evening Return (Hub 2 → Hub 1) — 1.8km, 10 min, ₹35
+    const ride4 = { id: 'ride-evening-return-1', start: new Date(now - 7 * 24 * 60 * 60 * 1000 + 18.5 * 60 * 60 * 1000), duration: 10, cost: 35.0, distance: 1.8, scooter: 'scooter-2', startHub: 'hub-2', endHub: 'hub-1' };
+    // Ride 5: Weekend Explorer (Hub 1 → Hub 3) — 8.2km, 32 min, ₹190
+    const ride5 = { id: 'ride-weekend-explorer-1', start: new Date(now - 5 * 24 * 60 * 60 * 1000 + 11 * 60 * 60 * 1000), duration: 32, cost: 190.0, distance: 8.2, scooter: 'scooter-1', startHub: 'hub-1', endHub: 'hub-3' };
+    // Ride 6: Quick Errand (Hub 4 → Hub 3) — 0.8km, 5 min, ₹15
+    const ride6 = { id: 'ride-quick-errand-1', start: new Date(now - 3 * 24 * 60 * 60 * 1000 + 16.75 * 60 * 60 * 1000), duration: 5, cost: 15.0, distance: 0.8, scooter: 'scooter-4', startHub: 'hub-4', endHub: 'hub-3' };
+    // Ride 7: Night Ride (Hub 3 → Hub 1) — 12.4km, 38 min, ₹300
+    const ride7 = { id: 'ride-night-cruise-1', start: new Date(now - 1 * 24 * 60 * 60 * 1000 + 22 * 60 * 60 * 1000), duration: 38, cost: 300.0, distance: 12.4, scooter: 'scooter-3', startHub: 'hub-3', endHub: 'hub-1' };
+
+    const allRides = [ride1, ride2, ride3, ride4, ride5, ride6, ride7];
+
+    for (const r of allRides) {
+      const startTime = r.start.toISOString();
+      const endTime = new Date(r.start.getTime() + r.duration * 60 * 1000).toISOString();
+
+      data.ride_details.push({
+        id: r.id,
+        user_id: userId,
+        scooter_id: r.scooter,
+        start_hub_id: r.startHub,
+        end_hub_id: r.endHub,
+        start_time: startTime,
+        end_time: endTime,
+        total_cost: r.cost,
+        total_distance: r.distance,
+        cost_type: 'per_minute',
+        created_at: startTime,
+        status: 'COMPLETED'
+      });
+
+      data.ride_steps.push(
+        { id: `step-${r.id}-start`, ride_details_id: r.id, steps: 'RIDE_CREATED', created_at: startTime },
+        { id: `step-${r.id}-end`, ride_details_id: r.id, steps: 'RIDE_ENDED', created_at: endTime }
+      );
+
+      data.transactions.push(
+        { id: `tx-${r.id}`, wallet_id: walletId, ride_id: r.id, amount: r.cost, created_at: endTime }
+      );
+    }
+
     saveData();
-    console.info('Database seeding completed successfully!');
+    console.info('Premium database seeding completed successfully with 7 completed rides!');
   } else {
-    console.info('Database already contains seeded data.');
+    console.info('Database already contains premium seeded data.');
   }
 }
 

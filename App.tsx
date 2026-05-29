@@ -16,10 +16,11 @@ import {SplashPrimary} from './modules/splash/screens';
 
 // misc
 import './ReactotronConfig';
-import {useAuthStore, useGlobalStore} from './globalStore';
+import {useAuthStore, useGlobalStore, useThemeStore} from './globalStore';
 import {config} from './config';
 
 function App(): React.JSX.Element {
+  const isDark = useThemeStore(state => state.isDark);
   const {setAuthBottomSheetRef, authLoaders, graphQLClient} = useAuthStore();
 
   const {
@@ -53,7 +54,7 @@ function App(): React.JSX.Element {
     <>
       <GestureHandlerRootView style={{flex: 1}}>
         <StatusBar
-          barStyle={'dark-content'}
+          barStyle={isDark ? 'light-content' : 'dark-content'}
           backgroundColor={'transparent'}
           translucent
         />

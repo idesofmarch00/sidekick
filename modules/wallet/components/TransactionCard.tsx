@@ -37,7 +37,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({transaction, onPress, 
 
   return (
     <TouchableOpacity 
-      style={[styles.container, {borderColor: colors.border || '#E2E8F0', backgroundColor: colors.background || '#FFFFFF'}]}
+      style={[styles.container, {borderColor: colors.lightGray, backgroundColor: colors.white}]}
       onPress={onPress}
       activeOpacity={0.7}
       testID={testID}
@@ -53,7 +53,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({transaction, onPress, 
         ) : (
           <H3 textColor="highlight" customStyles={{fontWeight: 'bold'}}>₹ {transaction.total_cost || 0}</H3>
         )}
-        <Text style={[styles.chevron, {color: colors.textSecondary || '#64748B'}]}>›</Text>
+        <Text style={[styles.chevron, {color: colors.textSecondary}]}>›</Text>
       </View>
     </TouchableOpacity>
   );

@@ -15,18 +15,21 @@ type Props = {
   customStyles?: TextStyle;
 };
 
-const {theme} = useThemeStore.getState();
+// Static typography metrics (don't change between themes)
+const {theme: initialTheme} = useThemeStore.getState();
 
 const H2: React.FC<Props> = ({
   children,
   textColor = 'textPrimary',
   customStyles,
 }) => {
+  const {colors} = useThemeStore(state => state.theme);
+
   return (
     <Text
       style={[
         styles.textStyle,
-        {color: theme.colors[textColor]},
+        {color: colors[textColor]},
         customStyles,
       ]}>
       {children}
@@ -38,6 +41,6 @@ export default H2;
 
 const styles = ScaledSheet.create({
   textStyle: {
-    ...theme.typography.skH2,
+    ...initialTheme.typography.skH2,
   },
 });
