@@ -39,8 +39,8 @@
     {
       "id": "hub-3",
       "name": "South Campus Hub (Dhaula Kuan)",
-      "latitude": 28.5840,
-      "longitude": 77.1630,
+      "latitude": 28.584,
+      "longitude": 77.163,
       "organization_id": "org-default-uuid-1111",
       "created_at": "2026-05-22T17:44:56.560Z"
     },
@@ -77,8 +77,8 @@
       "registration_number": "SCOOTER3",
       "status": "AVAILABLE",
       "is_active": true,
-      "latitude": 28.5840,
-      "longitude": 77.1630,
+      "latitude": 28.584,
+      "longitude": 77.163,
       "hub_id": "hub-3"
     },
     {
@@ -102,5 +102,6 @@
       "org_id": "org-default-uuid-1111"
     }
   ],
-  "transactions": []
+  "transactions": [],
+  "ride_coordinates": []
 }

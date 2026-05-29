@@ -14,6 +14,7 @@
     "clean-ios": "cd ios && xcodebuild clean && cd ..",
     "codegen": "graphql-codegen --config codegen.yml",
     "build-android": "cd android && ./gradlew assembleRelease && cd ..",
+    "benchmark:metrics": "node scripts/sidekick-metrics-benchmark.js",
     "find-unused": "npx unimported",
     "sign-config": "cd android && ./gradlew signingReport && cd ..",
     "postinstall": "patch-package",

@@ -4,8 +4,8 @@ import { gql } from 'urql';
 
 // Fallback GraphQL documents for sync - can be adapted to exact schema
 const SYNC_RIDE_MUTATION = gql`
-  mutation SyncLocalRide($id: uuid!, $scooter_id: String!, $start_time: timestamptz!, $end_time: timestamptz, $status: String!, $total_distance: numeric!) {
-    insert_ride_details_one(
+  mutation SyncLocalRide($id: uuid!, $scooter_id: uuid!, $start_time: timestamp!, $end_time: timestamp, $status: String!, $total_distance: numeric!) {
+    sync_local_ride(
       object: {
         id: $id,
         scooter_id: $scooter_id,
@@ -13,10 +13,6 @@ const SYNC_RIDE_MUTATION = gql`
         end_time: $end_time,
         status: $status,
         total_distance: $total_distance
-      },
-      on_conflict: {
-        constraint: ride_details_pkey,
-        update_columns: [status, end_time, total_distance]
       }
     ) {
       id
@@ -27,12 +23,8 @@ const SYNC_RIDE_MUTATION = gql`
 
 const BATCH_INSERT_COORDINATES_MUTATION = gql`
   mutation SyncCoordinatesBatch($objects: [ride_coordinates_insert_input!]!) {
-    insert_ride_coordinates(
+    sync_ride_coordinates(
       objects: $objects,
-      on_conflict: {
-        constraint: ride_coordinates_pkey,
-        update_columns: [sync_status]
-      }
     ) {
       affected_rows
     }
@@ -115,6 +107,7 @@ class SyncService {
       clearTimeout(this.syncTimer);
     }
 
+    const delayMs = this.retryDelayMs;
     this.syncTimer = setTimeout(async () => {
       if (!this.isOnline || this.isSyncing) return;
       
@@ -128,7 +121,7 @@ class SyncService {
         this.retryDelayMs = Math.min(this.retryDelayMs * 2, this.maxRetryDelayMs);
         this.triggerImmediateSync(); // Re-schedule next retry
       }
-    }, 500);
+    }, delayMs);
   }
 
   /**

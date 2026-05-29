@@ -184,7 +184,12 @@ class SQLiteService {
       const key = `coords:${coord.ride_id}`;
       const existing = this.fallbackStore.getString(key);
       const coords: LocalCoordinate[] = existing ? JSON.parse(existing) : [];
-      coords.push(coord);
+      const existingIndex = coords.findIndex(item => item.id === coord.id);
+      if (existingIndex >= 0) {
+        coords[existingIndex] = coord;
+      } else {
+        coords.push(coord);
+      }
       this.fallbackStore.set(key, JSON.stringify(coords));
       return;
     }
@@ -192,7 +197,7 @@ class SQLiteService {
     return new Promise((resolve, reject) => {
       this.db.transaction((tx: any) => {
         tx.executeSql(
-          `INSERT INTO coordinates (id, ride_id, latitude, longitude, altitude, speed, accuracy, timestamp, sync_status) 
+          `INSERT OR REPLACE INTO coordinates (id, ride_id, latitude, longitude, altitude, speed, accuracy, timestamp, sync_status) 
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);`,
           [coord.id, coord.ride_id, coord.latitude, coord.longitude, coord.altitude, coord.speed, coord.accuracy, coord.timestamp, coord.sync_status],
           () => resolve(),

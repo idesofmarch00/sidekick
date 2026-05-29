@@ -154,17 +154,13 @@ export function simplifyRoutePath(
 ): { latitude: number; longitude: number }[] {
   if (!coords || coords.length <= maxPoints) return coords;
 
-  const step = Math.ceil(coords.length / maxPoints);
-  const simplified: { latitude: number; longitude: number }[] = [];
+  const simplified: { latitude: number; longitude: number }[] = [coords[0]];
 
-  // Always keep first point
-  simplified.push(coords[0]);
-
-  for (let i = step; i < coords.length - 1; i += step) {
-    simplified.push(coords[i]);
+  for (let i = 1; i < maxPoints - 1; i += 1) {
+    const sourceIndex = Math.round((i * (coords.length - 1)) / (maxPoints - 1));
+    simplified.push(coords[sourceIndex]);
   }
 
-  // Always keep last point
   simplified.push(coords[coords.length - 1]);
 
   return simplified;

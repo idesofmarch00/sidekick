@@ -47,6 +47,7 @@ const schema = `
   }
 
   input ride_details_insert_input {
+    id: uuid
     user_id: uuid
     scooter_id: uuid
     start_hub_id: uuid
@@ -56,6 +57,26 @@ const schema = `
     total_cost: numeric
     total_distance: numeric
     cost_type: String
+  }
+
+  input local_ride_sync_input {
+    id: uuid!
+    scooter_id: uuid!
+    start_time: timestamp!
+    end_time: timestamp
+    status: String!
+    total_distance: numeric
+  }
+
+  input ride_coordinates_insert_input {
+    id: uuid!
+    ride_id: uuid!
+    latitude: Float!
+    longitude: Float!
+    altitude: Float
+    speed: Float
+    accuracy: Float
+    timestamp: numeric!
   }
 
   input wallets_insert_input {
@@ -129,9 +150,19 @@ const schema = `
     total_distance: Float
     cost_type: String
     created_at: timestamp!
+    status: String
     ride_steps: [RideStep!]!
     hubByStartHubId: Hub
     hub: Hub
+  }
+
+  type RideSyncResult {
+    id: uuid!
+    status: String!
+  }
+
+  type ride_coordinates_mutation_response {
+    affected_rows: Int!
   }
 
   type Transaction {
@@ -221,6 +252,14 @@ const schema = `
     insert_ride_steps_one(
       object: ride_step_insert_input!
     ): RideStep
+
+    sync_local_ride(
+      object: local_ride_sync_input!
+    ): RideSyncResult!
+
+    sync_ride_coordinates(
+      objects: [ride_coordinates_insert_input!]!
+    ): ride_coordinates_mutation_response!
 
     insert_wallets_one(
       object: wallets_insert_input!

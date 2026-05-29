@@ -13,6 +13,7 @@ let data = {
   scooters: [],
   ride_details: [],
   ride_steps: [],
+  ride_coordinates: [],
   wallets: [],
   transactions: []
 };
@@ -23,6 +24,7 @@ function loadData() {
     try {
       const fileContent = fs.readFileSync(dbFilePath, 'utf8');
       data = JSON.parse(fileContent);
+      data.ride_coordinates = data.ride_coordinates || [];
       console.info('JSON Database loaded successfully from:', dbFilePath);
     } catch (e) {
       console.error('Failed to parse database file. Re-initializing...', e);
@@ -65,6 +67,59 @@ class MockStatement {
       const [id, ride_details_id, steps, created_at] = params;
       const newRow = { id, ride_details_id, steps, created_at };
       data.ride_steps.push(newRow);
+      saveData();
+      return { changes: 1 };
+    }
+
+    if (this.sql.startsWith('UPSERT INTO ride_coordinates')) {
+      const [id, ride_id, latitude, longitude, altitude, speed, accuracy, timestamp] = params;
+      const row = {
+        id,
+        ride_id,
+        latitude: parseFloat(latitude),
+        longitude: parseFloat(longitude),
+        altitude: altitude === null || altitude === undefined ? null : parseFloat(altitude),
+        speed: speed === null || speed === undefined ? null : parseFloat(speed),
+        accuracy: accuracy === null || accuracy === undefined ? null : parseFloat(accuracy),
+        timestamp: Number(timestamp)
+      };
+      const existingIndex = data.ride_coordinates.findIndex(coord => coord.id === id);
+      if (existingIndex >= 0) {
+        data.ride_coordinates[existingIndex] = row;
+      } else {
+        data.ride_coordinates.push(row);
+      }
+      saveData();
+      return { changes: 1 };
+    }
+
+    if (this.sql.startsWith('UPSERT INTO ride_details')) {
+      const [id, user_id, scooter_id, start_hub_id, end_hub_id, start_time, end_time, total_distance, status, created_at] = params;
+      const existing = data.ride_details.find(ride => ride.id === id);
+      if (existing) {
+        existing.scooter_id = scooter_id || existing.scooter_id;
+        existing.start_hub_id = start_hub_id || existing.start_hub_id;
+        existing.end_hub_id = end_hub_id || existing.end_hub_id;
+        existing.start_time = start_time || existing.start_time;
+        existing.end_time = end_time || existing.end_time;
+        existing.total_distance = total_distance === null || total_distance === undefined ? existing.total_distance : parseFloat(total_distance);
+        existing.status = status || existing.status;
+      } else {
+        data.ride_details.push({
+          id,
+          user_id,
+          scooter_id,
+          start_hub_id,
+          end_hub_id,
+          start_time,
+          end_time,
+          total_cost: null,
+          total_distance: total_distance === null || total_distance === undefined ? null : parseFloat(total_distance),
+          cost_type: 'per_minute',
+          created_at,
+          status
+        });
+      }
       saveData();
       return { changes: 1 };
     }
@@ -194,6 +249,19 @@ class MockStatement {
     if (this.sql.startsWith('SELECT * FROM hubs WHERE id = ?')) {
       const id = params[0];
       return data.hubs.find(h => h.id === id) || null;
+    }
+
+    if (this.sql.startsWith('SELECT * FROM scooters WHERE id = ?')) {
+      const id = params[0];
+      return data.scooters.find(s => s.id === id) || null;
+    }
+
+    if (this.sql.includes('SELECT id FROM users LIMIT 1')) {
+      return data.users[0] || null;
+    }
+
+    if (this.sql.includes('SELECT id FROM hubs LIMIT 1')) {
+      return data.hubs[0] || null;
     }
 
     if (this.sql.startsWith('SELECT * FROM ride_details WHERE id = ?')) {

@@ -241,6 +241,53 @@ const resolvers = {
       return { id, ride_details_id, steps, created_at: createdAt };
     },
 
+    sync_local_ride: (_, { object }) => {
+      const existingRide = db.prepare('SELECT * FROM ride_details WHERE id = ?').get(object.id);
+      const scooter = db.prepare('SELECT * FROM scooters WHERE id = ?').get(object.scooter_id);
+      const defaultUser = db.prepare('SELECT id FROM users LIMIT 1').get();
+      const defaultHub = db.prepare('SELECT id FROM hubs LIMIT 1').get();
+      const startHubId = existingRide?.start_hub_id || scooter?.hub_id || defaultHub?.id;
+      const userId = existingRide?.user_id || defaultUser?.id;
+      const createdAt = existingRide?.created_at || new Date().toISOString();
+
+      db.prepare('UPSERT INTO ride_details').run(
+        object.id,
+        userId,
+        object.scooter_id,
+        startHubId,
+        existingRide?.end_hub_id || null,
+        object.start_time,
+        object.end_time || null,
+        object.total_distance || 0,
+        object.status,
+        createdAt,
+      );
+
+      return {
+        id: object.id,
+        status: object.status,
+      };
+    },
+
+    sync_ride_coordinates: (_, { objects }) => {
+      objects.forEach(coord => {
+        db.prepare('UPSERT INTO ride_coordinates').run(
+          coord.id,
+          coord.ride_id,
+          coord.latitude,
+          coord.longitude,
+          coord.altitude || null,
+          coord.speed || null,
+          coord.accuracy || null,
+          coord.timestamp,
+        );
+      });
+
+      return {
+        affected_rows: objects.length,
+      };
+    },
+
     insert_wallets_one: (_, { object }) => {
       const id = uuidv4();
       const createdAt = new Date().toISOString();
