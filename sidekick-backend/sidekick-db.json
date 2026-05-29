@@ -22,33 +22,33 @@
   "hubs": [
     {
       "id": "hub-1",
-      "name": "Downtown Hub (Indiranagar)",
-      "latitude": 12.9716,
-      "longitude": 77.5946,
+      "name": "North Campus Hub (Vishwavidyalaya Metro)",
+      "latitude": 28.6974,
+      "longitude": 77.2023,
       "organization_id": "org-default-uuid-1111",
       "created_at": "2026-05-22T17:44:56.560Z"
     },
     {
       "id": "hub-2",
-      "name": "Tech Park Hub (Whitefield)",
-      "latitude": 12.9698,
-      "longitude": 77.75,
+      "name": "Kamla Nagar Hub (North Campus)",
+      "latitude": 28.6816,
+      "longitude": 77.2016,
       "organization_id": "org-default-uuid-1111",
       "created_at": "2026-05-22T17:44:56.560Z"
     },
     {
       "id": "hub-3",
-      "name": "Central Station Hub",
-      "latitude": 12.9779,
-      "longitude": 77.5724,
+      "name": "South Campus Hub (Dhaula Kuan)",
+      "latitude": 28.5840,
+      "longitude": 77.1630,
       "organization_id": "org-default-uuid-1111",
       "created_at": "2026-05-22T17:44:56.560Z"
     },
     {
       "id": "hub-4",
-      "name": "HSR Layout Hub",
-      "latitude": 12.9141,
-      "longitude": 77.6413,
+      "name": "Satya Niketan Hub (South Campus)",
+      "latitude": 28.5873,
+      "longitude": 77.1645,
       "organization_id": "org-default-uuid-1111",
       "created_at": "2026-05-22T17:44:56.560Z"
     }
@@ -59,8 +59,8 @@
       "registration_number": "SCOOTER1",
       "status": "AVAILABLE",
       "is_active": true,
-      "latitude": 12.9716,
-      "longitude": 77.5946,
+      "latitude": 28.6974,
+      "longitude": 77.2023,
       "hub_id": "hub-1"
     },
     {
@@ -68,8 +68,8 @@
       "registration_number": "SCOOTER2",
       "status": "AVAILABLE",
       "is_active": true,
-      "latitude": 12.9698,
-      "longitude": 77.75,
+      "latitude": 28.6816,
+      "longitude": 77.2016,
       "hub_id": "hub-2"
     },
     {
@@ -77,8 +77,8 @@
       "registration_number": "SCOOTER3",
       "status": "AVAILABLE",
       "is_active": true,
-      "latitude": 12.9779,
-      "longitude": 77.5724,
+      "latitude": 28.5840,
+      "longitude": 77.1630,
       "hub_id": "hub-3"
     },
     {
@@ -86,8 +86,8 @@
       "registration_number": "SCOOTER4",
       "status": "AVAILABLE",
       "is_active": true,
-      "latitude": 12.9141,
-      "longitude": 77.6413,
+      "latitude": 28.5873,
+      "longitude": 77.1645,
       "hub_id": "hub-4"
     }
   ],

@@ -335,19 +335,19 @@ function initDb() {
 
     // Hubs
     const hubs = [
-      { id: 'hub-1', name: 'Downtown Hub (Indiranagar)', latitude: 12.9716, longitude: 77.5946, organization_id: orgId, created_at: new Date().toISOString() },
-      { id: 'hub-2', name: 'Tech Park Hub (Whitefield)', latitude: 12.9698, longitude: 77.7500, organization_id: orgId, created_at: new Date().toISOString() },
-      { id: 'hub-3', name: 'Central Station Hub', latitude: 12.9779, longitude: 77.5724, organization_id: orgId, created_at: new Date().toISOString() },
-      { id: 'hub-4', name: 'HSR Layout Hub', latitude: 12.9141, longitude: 77.6413, organization_id: orgId, created_at: new Date().toISOString() }
+      { id: 'hub-1', name: 'North Campus Hub (Vishwavidyalaya Metro)', latitude: 28.6974, longitude: 77.2023, organization_id: orgId, created_at: new Date().toISOString() },
+      { id: 'hub-2', name: 'Kamla Nagar Hub (North Campus)', latitude: 28.6816, longitude: 77.2016, organization_id: orgId, created_at: new Date().toISOString() },
+      { id: 'hub-3', name: 'South Campus Hub (Dhaula Kuan)', latitude: 28.5840, longitude: 77.1630, organization_id: orgId, created_at: new Date().toISOString() },
+      { id: 'hub-4', name: 'Satya Niketan Hub (South Campus)', latitude: 28.5873, longitude: 77.1645, organization_id: orgId, created_at: new Date().toISOString() }
     ];
     data.hubs.push(...hubs);
 
     // Scooters
     const scooters = [
-      { id: 'scooter-1', registration_number: 'SCOOTER1', status: 'AVAILABLE', is_active: true, latitude: 12.9716, longitude: 77.5946, hub_id: 'hub-1' },
-      { id: 'scooter-2', registration_number: 'SCOOTER2', status: 'AVAILABLE', is_active: true, latitude: 12.9698, longitude: 77.7500, hub_id: 'hub-2' },
-      { id: 'scooter-3', registration_number: 'SCOOTER3', status: 'AVAILABLE', is_active: true, latitude: 12.9779, longitude: 77.5724, hub_id: 'hub-3' },
-      { id: 'scooter-4', registration_number: 'SCOOTER4', status: 'AVAILABLE', is_active: true, latitude: 12.9141, longitude: 77.6413, hub_id: 'hub-4' }
+      { id: 'scooter-1', registration_number: 'SCOOTER1', status: 'AVAILABLE', is_active: true, latitude: 28.6974, longitude: 77.2023, hub_id: 'hub-1' },
+      { id: 'scooter-2', registration_number: 'SCOOTER2', status: 'AVAILABLE', is_active: true, latitude: 28.6816, longitude: 77.2016, hub_id: 'hub-2' },
+      { id: 'scooter-3', registration_number: 'SCOOTER3', status: 'AVAILABLE', is_active: true, latitude: 28.5840, longitude: 77.1630, hub_id: 'hub-3' },
+      { id: 'scooter-4', registration_number: 'SCOOTER4', status: 'AVAILABLE', is_active: true, latitude: 28.5873, longitude: 77.1645, hub_id: 'hub-4' }
     ];
     data.scooters.push(...scooters);
 
