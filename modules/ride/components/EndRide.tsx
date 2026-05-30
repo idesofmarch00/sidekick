@@ -28,6 +28,8 @@ const NearestHubCard: React.FC<NearestHubCardProps> = ({
         {
           borderWidth: selectedHub?.id === hub.id ? 2 : 0,
           borderColor: colors.primary,
+          backgroundColor: colors.lightGray,
+          marginVertical: 6,
         },
       ]}>
       <H3>{hub.name}</H3>

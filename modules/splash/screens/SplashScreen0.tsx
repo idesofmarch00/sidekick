@@ -14,6 +14,9 @@ import SideKickName from '../assets/sidekick_name.svg';
 // styles
 import {splashStyles} from '../splashStyles';
 
+// store
+import {useThemeStore} from '@/globalStore';
+
 // Define new styles specifically for this screen
 const styles = StyleSheet.create({
   backgroundLogoContainer: {
@@ -39,9 +42,10 @@ const styles = StyleSheet.create({
 
 const SplashScreen0: React.FC = () => {
   const navigation = useNavigation();
+  const {theme, isDark} = useThemeStore();
 
   return (
-    <View style={splashStyles.layoutBackground}>
+    <View style={[splashStyles.layoutBackground, {backgroundColor: isDark ? theme.colors.appBaseBg : theme.colors.primary}]}>
       {/* Background Logo Container */}
       <View style={styles.backgroundLogoContainer} pointerEvents="none">
         <SideKickBackgroundLogo style={styles.backgroundLogo} />

@@ -35,7 +35,11 @@ const TNC: React.FC = () => {
   }, []);
 
   if (!htmlUrl) {
-    return <ActivityIndicator size="large" />;
+    return (
+      <SafeAreaView style={{flex: 1, backgroundColor: colors.appBaseBg, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </SafeAreaView>
+    );
   }
 
   return (

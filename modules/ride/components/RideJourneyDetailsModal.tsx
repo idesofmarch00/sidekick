@@ -532,8 +532,8 @@ const styles = ScaledSheet.create({
     borderTopRightRadius: '20@ms',
     paddingHorizontal: '20@ms',
     paddingBottom: '32@vs',
-    height: '92%',
-    maxHeight: '94%',
+    height: '96%',
+    maxHeight: '98%',
   },
   dragBar: {
     width: '40@ms',

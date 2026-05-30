@@ -39,7 +39,7 @@ import {useAuthStore, useThemeStore} from '@/globalStore';
 const {width, height} = Dimensions.get('window'); // Get screen dimensions
 
 const SignupForm: React.FC = () => {
-  const {theme} = useThemeStore();
+  const {theme, isDark} = useThemeStore();
   const headerHeight = useHeaderHeight();
 
   const navigation = useNavigation();
@@ -102,11 +102,15 @@ const SignupForm: React.FC = () => {
 
   return (
     <>
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: theme.colors.appBaseBg}}>
         <ImageBackground
           source={require('../assets/Map.png')} // Path to your background image
           style={[styles.background, {width, height}]} // Set width and height dynamically
-        />
+        >
+          {isDark && (
+            <View style={{position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: 'rgba(18, 20, 28, 0.65)'}} />
+          )}
+        </ImageBackground>
       </View>
       <BottomSheet
         key="authBottomSheet"

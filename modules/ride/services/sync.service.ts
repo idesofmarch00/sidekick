@@ -1,5 +1,4 @@
 import sqliteService from './sqlite.service';
-import { callMutation } from '@/utils/client';
 import { gql } from 'urql';
 
 // Fallback GraphQL documents for sync - can be adapted to exact schema
@@ -154,9 +153,22 @@ class SyncService {
 
     console.info(`[SyncService] Synchronizing ${unsyncedRides.length} ride headers...`);
 
+    let clientModule: any;
+    try {
+      clientModule = require('@/utils/client');
+    } catch (e) {
+      console.warn('[SyncService] Client module not available yet for sync:', e);
+      return;
+    }
+
+    if (!clientModule || !clientModule.callMutation) {
+      console.warn('[SyncService] callMutation not exported or module not loaded');
+      return;
+    }
+
     for (const localRide of unsyncedRides) {
       try {
-        await callMutation({
+        await clientModule.callMutation({
           queryDocument: SYNC_RIDE_MUTATION,
           variables: {
             id: localRide.id,
@@ -188,6 +200,19 @@ class SyncService {
 
     console.info(`[SyncService] Synchronizing ${coords.length} coordinates in batches...`);
 
+    let clientModule: any;
+    try {
+      clientModule = require('@/utils/client');
+    } catch (e) {
+      console.warn('[SyncService] Client module not available yet for coordinates sync:', e);
+      return;
+    }
+
+    if (!clientModule || !clientModule.callMutation) {
+      console.warn('[SyncService] callMutation not exported or module not loaded for coordinates sync');
+      return;
+    }
+
     const batchSize = 100;
     for (let i = 0; i < coords.length; i += batchSize) {
       const batch = coords.slice(i, i + batchSize);
@@ -203,7 +228,7 @@ class SyncService {
       }));
 
       try {
-        await callMutation({
+        await clientModule.callMutation({
           queryDocument: BATCH_INSERT_COORDINATES_MUTATION,
           variables: { objects }
         });

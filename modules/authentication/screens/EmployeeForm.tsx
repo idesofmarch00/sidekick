@@ -38,6 +38,7 @@ const EmployeeForm: React.FC = () => {
   const navigation = useNavigation();
 
   const {colors} = useThemeStore(state => state.theme);
+  const isDark = useThemeStore(state => state.isDark);
   const authBottomSheetRef = useRef<BottomSheet>(null);
 
   const [employeeId, setEmployeeId] = useState<string>('');
@@ -119,11 +120,15 @@ const EmployeeForm: React.FC = () => {
 
   return (
     <>
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, backgroundColor: colors.appBaseBg}}>
         <ImageBackground
           source={require('../assets/Map.png')} // Path to your background image
           style={[styles.background, {width, height}]} // Set width and height dynamically
-        />
+        >
+          {isDark && (
+            <View style={{position: 'absolute', left: 0, right: 0, top: 0, bottom: 0, backgroundColor: 'rgba(18, 20, 28, 0.65)'}} />
+          )}
+        </ImageBackground>
       </View>
       <BottomSheet
         key="authBottomSheet"
