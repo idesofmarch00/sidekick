@@ -1,12 +1,12 @@
 // src/components/PrimaryButton.tsx
-import React, {ReactNode} from 'react';
-import {Pressable, Text, ViewStyle} from 'react-native';
-import {ScaledSheet} from 'react-native-size-matters';
-import {TouchableHighlight} from '@gorhom/bottom-sheet';
-import {ActivityIndicator} from 'react-native-paper';
+import React, { ReactNode } from 'react';
+import { Pressable, Text, ViewStyle } from 'react-native';
+import { ScaledSheet } from 'react-native-size-matters';
+import { TouchableHighlight } from '@gorhom/bottom-sheet';
+import { ActivityIndicator } from 'react-native-paper';
 
 // store
-import {useThemeStore} from '@/theme/store';
+import { useThemeStore } from '@/theme/store';
 
 type Props = {
   children: ReactNode;
@@ -24,7 +24,7 @@ type ContainerStyles = {
   alert: ViewStyle;
 };
 
-const {typography, colors} = useThemeStore.getState().theme;
+const { typography, colors } = useThemeStore.getState().theme;
 
 const ButtonText: React.FC<Props> = ({
   children,
@@ -56,7 +56,7 @@ const ButtonText: React.FC<Props> = ({
       style={[
         styles.pressableContainer,
         containerStyles[variant],
-        {...customStyle},
+        { ...customStyle },
       ]}>
       <ActivityIndicator color={colors.textPrimary} />
     </Pressable>
@@ -67,7 +67,7 @@ const ButtonText: React.FC<Props> = ({
       style={[
         styles.pressableContainer,
         containerStyles[variant],
-        {...customStyle},
+        { ...customStyle },
       ]}>
       <ChildText variant={variant}>{children}</ChildText>
     </TouchableHighlight>
@@ -79,7 +79,7 @@ type ChildTextProps = {
   variant: 'primary' | 'secondary' | 'highlight' | 'error' | 'alert';
 };
 
-const ChildText: React.FC<ChildTextProps> = ({children, variant}) => {
+const ChildText: React.FC<ChildTextProps> = ({ children, variant }) => {
   return (
     <Text style={[styles.commonTextStyle, styles[variant]]}>{children}</Text>
   );
@@ -99,7 +99,7 @@ const styles = ScaledSheet.create({
     ...typography.skButtonMedium,
   },
   primary: {
-    color: colors.textPrimary,
+    color: colors.white,
   },
   secondary: {
     color: colors.textPrimary,

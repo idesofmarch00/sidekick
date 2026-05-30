@@ -1,7 +1,7 @@
-import React, {ReactNode} from 'react';
-import {ViewStyle, TextStyle} from 'react-native';
-import {Button} from 'react-native-paper';
-import {useThemeStore} from '@/theme/store';
+import React, { ReactNode } from 'react';
+import { ViewStyle, TextStyle } from 'react-native';
+import { Button } from 'react-native-paper';
+import { useThemeStore } from '@/theme/store';
 
 type Props = {
   children: ReactNode;
@@ -26,7 +26,7 @@ const ButtonWithIcon: React.FC<Props> = ({
   variant,
   IconComponent,
 }) => {
-  const {colors} = useThemeStore(state => state.theme);
+  const { colors } = useThemeStore(state => state.theme);
 
   const containerStyles: ContainerStyles = {
     primary: {
@@ -45,7 +45,7 @@ const ButtonWithIcon: React.FC<Props> = ({
 
   const textStyles: TextStyles = {
     primary: {
-      color: colors.textPrimary,
+      color: colors.white,
       fontWeight: '600',
       fontSize: 16,
     },
