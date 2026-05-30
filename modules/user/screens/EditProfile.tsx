@@ -125,9 +125,9 @@ const EditProfile: React.FC<EditProfileProps> = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, {backgroundColor: colors.appBaseBg}]}>
       {/* Form container with blue border */}
-      <View style={[styles.formContainer]}>
+      <View style={[styles.formContainer, {backgroundColor: colors.white}]}>
         {/* Name input */}
         <Input
           title="Name"
@@ -193,7 +193,6 @@ const EditProfile: React.FC<EditProfileProps> = () => {
 const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
     paddingTop: Platform.OS === 'android' ? '25@vs' : 0,
   },
   formContainer: {
@@ -201,6 +200,7 @@ const styles = ScaledSheet.create({
     padding: 16,
     flexDirection: 'column',
     gap: 8,
+    borderRadius: 16,
   },
   inputContainer: {
     marginBottom: 16,

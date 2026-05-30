@@ -7,13 +7,15 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 // components
 import {ButtonTextBottomSheet, Divider, H1, P1} from '@/components';
-import {useAuthStore} from '@/globalStore';
+// store
+import {useAuthStore, useThemeStore} from '@/globalStore';
 
 const {width, height} = Dimensions.get('window'); // Get screen dimensions
 
 const WelcomeScreen: React.FC = () => {
   const navigation = useNavigation();
   const authBottomSheetRef = useRef<BottomSheet>(null);
+  const {colors} = useThemeStore(state => state.theme);
 
   const {stopLoading} = useAuthStore();
 
@@ -46,14 +48,15 @@ const WelcomeScreen: React.FC = () => {
         enableHandlePanningGesture={false}
         handleComponent={() => null}
         style={{flex: 1}}
+        backgroundStyle={{backgroundColor: colors.white}}
         keyboardBehavior="interactive"
         enableContentPanningGesture={false}
         android_keyboardInputMode="adjustResize"
         keyboardBlurBehavior="restore"
         index={1}
         snapPoints={['45%']}>
-        <BottomSheetView>
-          <View style={styles.contentContainer}>
+        <BottomSheetView style={{backgroundColor: colors.white}}>
+          <View style={[styles.contentContainer, {backgroundColor: colors.white}]}>
             <H1>Welcome!</H1>
             <Divider height={9.6} />
             <P1>Please Sign In to Continue</P1>
@@ -97,7 +100,6 @@ const styles = ScaledSheet.create({
   contentContainer: {
     alignItems: 'center',
     width: '100%',
-    backgroundColor: 'white', // Optional: Adds a dark overlay for text readability
     borderRadius: 20,
     paddingTop: 32,
     paddingHorizontal: 24,

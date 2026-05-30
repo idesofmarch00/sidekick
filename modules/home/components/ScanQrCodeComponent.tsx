@@ -35,6 +35,7 @@ const ScanQrCodeComponent = () => {
   const navigator = useNavigation();
   const {closeModal} = useGlobalStore();
   const {initiateRideTracking} = useRideStore();
+  const {colors} = useThemeStore(state => state.theme);
 
   const [url, setURL] = useState<any>();
   const {user} = useUserStore();
@@ -359,7 +360,7 @@ const ScanQrCodeComponent = () => {
             <Divider height={12} />
             <View style={styles.separatorContainer}>
               <LinearGradientSVG style={styles.gradientLeft} />
-              <Text style={styles.orText}>or</Text>
+              <Text style={[styles.orText, {color: colors.textPrimary}]}>or</Text>
               <LinearGradientSVG style={styles.gradientRight} />
             </View>
             <Divider height={12} />
@@ -399,8 +400,11 @@ const ScanQrCodeComponent = () => {
                 placeholderTextColor={colors.textSecondary}
                 style={[
                   styles.input,
-                  {color: colors.textPrimary},
-                  scooterCodeError ? {borderColor: colors.error} : null,
+                  {
+                    color: colors.textPrimary,
+                    borderColor: scooterCodeError ? colors.error : colors.lightGray,
+                    backgroundColor: colors.white,
+                  },
                 ]}
               />
               <View style={{width: 100}}>

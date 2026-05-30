@@ -18,10 +18,6 @@ import {RideService, WalletService} from '@/globalService';
 import rideStorage from '../storage';
 import {Ride_Step_Enum} from '@/generated/graphql';
 
-const {
-  theme: {colors},
-} = useThemeStore.getState();
-
 const ReachedHub: React.FC = () => {
   const {setModalComponent, setModalCloseButton} = useGlobalStore();
   const {
@@ -33,6 +29,7 @@ const ReachedHub: React.FC = () => {
     secondsElapsed,
     terminateRideTracking,
   } = useRideStore();
+  const {colors} = useThemeStore(state => state.theme);
 
   const onSwipeSuccess = async () => {
     setIsPaused(true);
@@ -115,7 +112,7 @@ const ReachedHub: React.FC = () => {
   };
 
   return (
-    <View style={styles.reachedHubWrapper}>
+    <View style={[styles.reachedHubWrapper, {backgroundColor: colors.white}]}>
       <View style={styles.headingContainer}>
         <TickMarkRounded />
         <H2 customStyles={{textAlign: 'center'}}>Reached Destination</H2>

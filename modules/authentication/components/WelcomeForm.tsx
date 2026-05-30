@@ -10,10 +10,14 @@ import {ButtonText, Divider, H1, P1} from '@/components';
 // utils
 import {authUtils} from '../utils';
 
+import {useThemeStore} from '@/globalStore';
+
 const WelcomeForm: React.FC = () => {
+  const {colors} = useThemeStore(state => state.theme);
+
   return (
-    <BottomSheetView>
-      <View style={styles.contentContainer}>
+    <BottomSheetView style={{backgroundColor: colors.white}}>
+      <View style={[styles.contentContainer, {backgroundColor: colors.white}]}>
         <H1>Welcome!</H1>
         <Divider height={9.6} />
         <P1>Please Sign In to Continue</P1>
@@ -52,7 +56,6 @@ const styles = ScaledSheet.create({
   contentContainer: {
     alignItems: 'center',
     width: '100%',
-    backgroundColor: 'white', // Optional: Adds a dark overlay for text readability
     borderRadius: 20,
     paddingTop: 32,
     paddingHorizontal: 24,

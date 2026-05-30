@@ -15,13 +15,27 @@ import {AnyVariables, Client, cacheExchange, fetchExchange} from 'urql';
 import {authExchange} from '@urql/exchange-auth';
 import auth from '@react-native-firebase/auth';
 
-// store
-import useAuthStore from '@/modules/authentication/store';
-
 // types
 import {DocumentNode} from 'graphql';
 
 const authErrorCodes = ['invalid-headers', 'invalid-jwt'];
+
+// Decoupled callbacks to break circular dependencies with Zustand authStore
+let getAuthTokenCallback: (() => string) | null = null;
+let setAuthTokenCallback: ((token: string) => void) | null = null;
+let getGraphQLClientCallback: (() => Client | null) | null = null;
+
+export const setAuthTokenGetter = (callback: () => string) => {
+  getAuthTokenCallback = callback;
+};
+
+export const setAuthTokenSetter = (callback: (token: string) => void) => {
+  setAuthTokenCallback = callback;
+};
+
+export const setGraphQLClientGetter = (callback: () => Client | null) => {
+  getGraphQLClientCallback = callback;
+};
 
 /**
  * this function initializes the GraphQL client with the authentication token.
@@ -42,9 +56,10 @@ export const initializeClient = () => {
            * @returns The modified operation with the added headers.
            */
           addAuthToOperation(operation) {
+            const token = getAuthTokenCallback ? getAuthTokenCallback() : '';
             return utils.appendHeaders(operation, {
               // always using current token in store so that the token is always fresh
-              Authorization: `Bearer ${useAuthStore.getState().authToken}`,
+              Authorization: `Bearer ${token}`,
             });
           },
           /**
@@ -73,10 +88,9 @@ export const initializeClient = () => {
               const unsubscribe = auth().onAuthStateChanged(async user => {
                 unsubscribe();
                 const refreshToken = (await user?.getIdToken()) as string;
-                useAuthStore.setState(state => ({
-                  ...state,
-                  authToken: refreshToken,
-                }));
+                if (setAuthTokenCallback && refreshToken) {
+                  setAuthTokenCallback(refreshToken);
+                }
                 resolve();
               });
             });
@@ -110,7 +124,10 @@ type Args = {
  * @throws An error if the query fails.
  */
 export const callQuery = async (args: Args) => {
-  const graphQlClient = useAuthStore.getState().graphQLClient as Client;
+  const graphQlClient = getGraphQLClientCallback ? getGraphQLClientCallback() : null;
+  if (!graphQlClient) {
+    throw new Error('GraphQL client not initialized');
+  }
 
   try {
     const {data, error} = await graphQlClient
@@ -142,7 +159,10 @@ export const callQuery = async (args: Args) => {
  * @throws An error if the mutation fails.
  */
 export const callMutation = async (args: Args) => {
-  const graphQlClient = useAuthStore.getState().graphQLClient as Client;
+  const graphQlClient = getGraphQLClientCallback ? getGraphQLClientCallback() : null;
+  if (!graphQlClient) {
+    throw new Error('GraphQL client not initialized');
+  }
 
   try {
     const {data, error} = await graphQlClient

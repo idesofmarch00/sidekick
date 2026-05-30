@@ -3,10 +3,11 @@ import Modal from 'react-native-modal';
 import {View, StyleSheet, Dimensions} from 'react-native';
 
 // store
-import {useGlobalStore} from '@/globalStore';
+import {useGlobalStore, useThemeStore} from '@/globalStore';
 
 const GlobalModal: React.FC = () => {
   const {isModalOpen, ModalComponent, ModalCloseButton} = useGlobalStore();
+  const {colors} = useThemeStore(state => state.theme);
 
   return (
     <Modal
@@ -27,7 +28,7 @@ const GlobalModal: React.FC = () => {
       backdropTransitionInTiming={300}
       animationOut="slideOutDown"
       onBackdropPress={() => null}>
-      <View style={styles.modalContainer}>
+      <View style={[styles.modalContainer, {backgroundColor: colors.white, borderColor: colors.lightGray}]}>
         {ModalCloseButton && <ModalCloseButton />}
         {ModalComponent && <ModalComponent />}
       </View>
@@ -37,14 +38,12 @@ const GlobalModal: React.FC = () => {
 
 const styles = StyleSheet.create({
   modalContainer: {
-    backgroundColor: 'white',
     padding: 20,
     borderRadius: 16,
     maxHeight: '90%',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#86A0CA',
     borderStyle: 'solid',
     position: 'relative',
     zIndex: 99,

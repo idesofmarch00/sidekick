@@ -14,21 +14,12 @@ import useLocationStore from '@/modules/home/store/locationStore';
 import {sortHubsByDistance} from '@/modules/home/utilis/distanceUtils';
 import {FetchAllHubsQuery} from '@/generated/graphql';
 
-const {
-  theme: {colors},
-} = useThemeStore.getState();
-
-type NearestHubCardProps = {
-  hub: FetchAllHubsQuery['hubs'][0] & {distance: string};
-  selectedHub: FetchAllHubsQuery['hubs'][0] | undefined;
-  setSelectedHub: (hub: FetchAllHubsQuery['hubs'][0]) => void;
-};
-
 const NearestHubCard: React.FC<NearestHubCardProps> = ({
   hub,
   selectedHub,
   setSelectedHub,
 }) => {
+  const {colors} = useThemeStore(state => state.theme);
   return (
     <Pressable
       onPress={() => setSelectedHub(hub)}
@@ -36,6 +27,7 @@ const NearestHubCard: React.FC<NearestHubCardProps> = ({
         styles.nearestCardContainer,
         {
           borderWidth: selectedHub?.id === hub.id ? 2 : 0,
+          borderColor: colors.primary,
         },
       ]}>
       <H3>{hub.name}</H3>
@@ -49,6 +41,7 @@ const EndRide: React.FC = () => {
   const {latitude, longitude} = useLocationStore();
   const {closeModal, setModalComponent} = useGlobalStore();
   const {setIsPaused} = useRideStore();
+  const {colors} = useThemeStore(state => state.theme);
 
   const sortedHubs = useMemo(() => {
     if (!latitude || !longitude || !hubs.length) {
@@ -60,7 +53,7 @@ const EndRide: React.FC = () => {
   const nearestDistance = sortedHubs[0]?.distance;
 
   return (
-    <View style={styles.endRideWrapper}>
+    <View style={[styles.endRideWrapper, {backgroundColor: colors.white}]}>
       <View>
         <H2 customStyles={{textAlign: 'center'}}>
           Nearest Hub is {nearestDistance} away!
@@ -108,7 +101,6 @@ export default EndRide;
 
 const styles = ScaledSheet.create({
   endRideWrapper: {
-    backgroundColor: colors.white,
     paddingTop: '41.6@vs',
     width: '100%',
   },
@@ -119,7 +111,6 @@ const styles = ScaledSheet.create({
     alignItems: 'center',
     padding: '18@ms',
     borderRadius: 20,
-    borderColor: colors.primary,
   },
   actionButtonContainer: {
     width: '100%',

@@ -53,9 +53,9 @@ const SplashScreenCarousel: React.FC = () => {
       <View style={styles.slide}>
         {item.image}
         <Divider height={32} />
-        <H1>{item.heading}</H1>
+        <H1 customStyles={{color: '#2C2E49'}}>{item.heading}</H1>
         <Divider height={9.6} />
-        <P1 weight={'600'} customStyles={{textAlign: 'center'}}>
+        <P1 weight={'600'} customStyles={{textAlign: 'center', color: '#2C2E49'}}>
           {item.subHeading}
         </P1>
       </View>
@@ -115,7 +115,7 @@ const SplashScreenCarousel: React.FC = () => {
               // @ts-ignore
               navigation.replace('splash3');
             }}>
-            <Text style={{fontWeight: '600', fontSize: 16, marginLeft: 40}}>
+            <Text style={{fontWeight: '600', fontSize: 16, marginLeft: 40, color: '#2C2E49'}}>
               Skip
             </Text>
           </Pressable>

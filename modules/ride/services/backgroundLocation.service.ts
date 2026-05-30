@@ -243,52 +243,15 @@ class BackgroundLocationService {
   }
 
   /**
-   * Senior Practice: Spawns native headless background service tasks to ensure
-   * location telemetry tracks persistently when the application goes into the background.
+   * headless background service tasks placeholder.
    */
   private enableNativeBackgroundService() {
-    try {
-      // Dynamic import to prevent bundler errors if native bridge package is not installed/linked
-      const BackgroundActions = require('react-native-background-actions').default;
-
-      const bgOptions = {
-        taskName: 'SidekickTracking',
-        taskTitle: 'Ride Tracking Active',
-        taskDescription: 'Sidekick is logging your bike route to ensure accurate stats.',
-        taskIcon: {
-          name: 'ic_launcher',
-          type: 'mipmap',
-        },
-        color: '#FF5733',
-        parameters: {
-          delay: 1000,
-        },
-      };
-
-      const backgroundTask = async (taskData: any) => {
-        await new Promise(async (resolve) => {
-          // Task continues in headless loop until stopped
-          while (this.watchId !== null) {
-            await new Promise((r) => setTimeout(r, 2000));
-          }
-          resolve(null);
-        });
-      };
-
-      BackgroundActions.start(backgroundTask, bgOptions);
-    } catch (error) {
-      // Graceful fallback for non-native / simulator / testing environments
-      console.info('[BackgroundLocationService] Background task running in hybrid standard mode.');
-    }
+    // Standard hybrid background mode fallback since react-native-background-actions is not in package.json
+    console.info('[BackgroundLocationService] Background task running in hybrid standard mode.');
   }
 
   private disableNativeBackgroundService() {
-    try {
-      const BackgroundActions = require('react-native-background-actions').default;
-      BackgroundActions.stop();
-    } catch (error) {
-      // Fail silently
-    }
+    // Graceful no-op stop
   }
 }
 

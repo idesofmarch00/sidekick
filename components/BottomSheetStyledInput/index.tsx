@@ -15,20 +15,28 @@ interface BottomSheetStyledInputProps extends TextInputProps {
   secureTextEntry?: boolean; // Option to toggle password input
 }
 
-const {theme} = useThemeStore.getState();
-
 const BottomSheetStyledInput: React.FC<BottomSheetStyledInputProps> = ({
   placeholder,
   secureTextEntry = false,
   customStyle,
   ...rest
 }) => {
+  const {colors} = useThemeStore(state => state.theme);
+
   return (
     <BottomSheetTextInput
       placeholder={placeholder}
-      placeholderTextColor={theme.colors.textSecondary}
+      placeholderTextColor={colors.textSecondary}
       secureTextEntry={secureTextEntry}
-      style={[styles.input, customStyle]}
+      style={[
+        styles.input,
+        {
+          borderColor: colors.lightGray,
+          color: colors.textPrimary,
+          backgroundColor: colors.white,
+        },
+        customStyle,
+      ]}
       {...rest}
     />
   );
@@ -41,11 +49,9 @@ const styles = ScaledSheet.create({
     borderWidth: 2,
     width: '100%',
     height: '48@vs',
-    borderColor: theme.colors.textSecondary,
     borderRadius: 20,
     paddingLeft: '18@s',
     fontWeight: '600',
     fontSize: '15.2@ms',
-    color: theme.colors.textPrimary,
   },
 });

@@ -132,13 +132,14 @@ const AlreadyUserForm: React.FC = () => {
         enableOverDrag={false}
         enableHandlePanningGesture={false}
         handleComponent={() => null}
+        backgroundStyle={{backgroundColor: theme.colors.white}}
         keyboardBehavior="interactive"
         enableContentPanningGesture={false}
         android_keyboardInputMode="adjustResize"
         keyboardBlurBehavior="restore"
         index={1}
         snapPoints={getSnapPoints()}>
-        <BottomSheetView style={styles.contentContainer}>
+        <BottomSheetView style={[styles.contentContainer, {backgroundColor: theme.colors.white}]}>
           <View style={{width: '100%'}}>
             <LabelPrimary customStyles={{paddingLeft: scale(18)}}>
               Enter Your Phone Number
@@ -151,10 +152,11 @@ const AlreadyUserForm: React.FC = () => {
                 borderWidth: 2,
                 width: '100%',
                 height: verticalScale(48),
-                borderColor: theme.colors.textSecondary,
+                borderColor: theme.colors.lightGray,
                 borderRadius: 20,
                 paddingLeft: scale(18),
                 columnGap: 10,
+                backgroundColor: theme.colors.white,
               }}>
               <View
                 style={{
@@ -171,7 +173,7 @@ const AlreadyUserForm: React.FC = () => {
                   +91{' '}
                 </Text>
                 <View
-                  style={{width: 1, height: 20, backgroundColor: 'black'}}
+                  style={{width: 1, height: 20, backgroundColor: theme.colors.lightGray}}
                 />
               </View>
               {Platform.OS === 'android' ? (
@@ -254,7 +256,6 @@ const styles = ScaledSheet.create({
   contentContainer: {
     rowGap: 16,
     width: '100%',
-    backgroundColor: 'white',
     borderRadius: 20,
     paddingTop: 32,
     paddingHorizontal: 24,

@@ -37,7 +37,7 @@ const EmployeeForm: React.FC = () => {
   const headerHeight = useHeaderHeight();
   const navigation = useNavigation();
 
-  const {theme} = useThemeStore();
+  const {colors} = useThemeStore(state => state.theme);
   const authBottomSheetRef = useRef<BottomSheet>(null);
 
   const [employeeId, setEmployeeId] = useState<string>('');
@@ -133,13 +133,14 @@ const EmployeeForm: React.FC = () => {
         enableOverDrag={false}
         enableHandlePanningGesture={false}
         handleComponent={() => null}
+        backgroundStyle={{backgroundColor: colors.white}}
         keyboardBehavior="interactive"
         enableContentPanningGesture={false}
         android_keyboardInputMode="adjustResize"
         keyboardBlurBehavior="restore"
         index={1}
         snapPoints={getSnapPoints()}>
-        <BottomSheetView style={styles.contentContainer}>
+        <BottomSheetView style={[styles.contentContainer, {backgroundColor: colors.white}]}>
           <View style={{width: '100%'}}>
             <LabelPrimary customStyles={{paddingLeft: scale(18)}}>
               Select Institution
@@ -150,14 +151,23 @@ const EmployeeForm: React.FC = () => {
                 borderWidth: 2,
                 width: '100%',
                 height: verticalScale(48),
-                borderColor: theme.colors.textSecondary,
+                borderColor: colors.lightGray,
                 borderRadius: 20,
                 paddingLeft: scale(18),
+                backgroundColor: colors.white,
               }}
-              searchPlaceholderTextColor={theme.colors.textSecondary}
+              containerStyle={{
+                backgroundColor: colors.white,
+                borderColor: colors.lightGray,
+              }}
+              activeColor={colors.lightGray}
+              itemTextStyle={{
+                color: colors.textPrimary,
+              }}
+              searchPlaceholderTextColor={colors.textSecondary}
               mode="modal"
               placeholder="XXXXXXXXXX"
-              placeholderStyle={{color: theme.colors.textSecondary}}
+              placeholderStyle={{color: colors.textSecondary}}
               iconStyle={{
                 right: 10,
               }}
@@ -196,24 +206,25 @@ const EmployeeForm: React.FC = () => {
                 onChangeText={val => {
                   setEmployeeId(val);
                 }}
-                placeholderTextColor={theme.colors.textSecondary}
+                placeholderTextColor={colors.textSecondary}
                 style={{
                   borderWidth: 2,
                   width: '100%',
                   height: verticalScale(48),
-                  borderColor: theme.colors.textSecondary,
+                  borderColor: colors.lightGray,
+                  backgroundColor: colors.white,
                   borderRadius: 20,
                   paddingLeft: scale(18),
                   fontWeight: '600',
                   fontSize: moderateScale(15.2),
-                  color: theme.colors.textPrimary,
+                  color: colors.textPrimary,
                 }}
               />
             ) : (
               <BottomSheetTextInput
                 autoCapitalize="characters"
                 placeholder="XXXXXXXXXX"
-                placeholderTextColor={theme.colors.textSecondary}
+                placeholderTextColor={colors.textSecondary}
                 onChangeText={val => {
                   setEmployeeId(val);
                 }}
@@ -221,12 +232,13 @@ const EmployeeForm: React.FC = () => {
                   borderWidth: 2,
                   width: '100%',
                   height: verticalScale(48),
-                  borderColor: theme.colors.textSecondary,
+                  borderColor: colors.lightGray,
+                  backgroundColor: colors.white,
                   borderRadius: 20,
                   paddingLeft: scale(18),
                   fontWeight: '600',
                   fontSize: moderateScale(15.2),
-                  color: theme.colors.textPrimary,
+                  color: colors.textPrimary,
                 }}
               />
             )}
@@ -244,7 +256,8 @@ const EmployeeForm: React.FC = () => {
                 borderWidth: 2,
                 width: '100%',
                 height: verticalScale(48),
-                borderColor: theme.colors.textSecondary,
+                borderColor: colors.lightGray,
+                backgroundColor: colors.white,
                 borderRadius: 20,
                 paddingLeft: scale(18),
                 columnGap: 10,
@@ -257,14 +270,14 @@ const EmployeeForm: React.FC = () => {
                 }}>
                 <Text
                   style={{
-                    color: theme.colors.highlight,
+                    color: colors.highlight,
                     fontSize: 16,
                     fontFamily: 'PlusJakartaSans-Bold',
                   }}>
                   +91{' '}
                 </Text>
                 <View
-                  style={{width: 1, height: 20, backgroundColor: 'black'}}
+                  style={{width: 1, height: 20, backgroundColor: colors.lightGray}}
                 />
               </View>
               {Platform.OS === 'android' ? (
@@ -274,9 +287,9 @@ const EmployeeForm: React.FC = () => {
                   keyboardType="numeric"
                   placeholder="XXXXXXXXXX"
                   onChangeText={setExistingUserPhoneNumber}
-                  placeholderTextColor={theme.colors.textSecondary}
+                  placeholderTextColor={colors.textSecondary}
                   style={{
-                    color: theme.colors.textPrimary,
+                    color: colors.textPrimary,
                     width: '70%',
                     fontWeight: '600',
                     paddingVertical: 0,
@@ -289,9 +302,9 @@ const EmployeeForm: React.FC = () => {
                   keyboardType="numeric"
                   placeholder="XXXXXXXXXX"
                   onChangeText={setExistingUserPhoneNumber}
-                  placeholderTextColor={theme.colors.textSecondary}
+                  placeholderTextColor={colors.textSecondary}
                   style={{
-                    color: theme.colors.textPrimary,
+                    color: colors.textPrimary,
                     width: '70%',
                     fontWeight: '600',
                     paddingVertical: 0,
@@ -331,7 +344,6 @@ const styles = ScaledSheet.create({
     height: 200,
     rowGap: 16,
     width: '100%',
-    backgroundColor: 'white',
     borderRadius: 20,
     paddingTop: 32,
     paddingHorizontal: 24,

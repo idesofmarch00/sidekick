@@ -32,13 +32,9 @@ import {config} from '@/config';
 import {showCredits} from '@/utils/user';
 import {useNavigation} from '@react-navigation/native';
 
-const {colors} = useThemeStore.getState().theme;
-
-// Quick amount options
-const QUICK_AMOUNTS = [100, 200, 500, 1000];
-
 const AddFundsScreen = () => {
   const navigation = useNavigation();
+  const {colors} = useThemeStore(state => state.theme);
 
   const {openModal, setModalComponent} = useGlobalStore();
   const {
@@ -150,7 +146,7 @@ const AddFundsScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, {backgroundColor: colors.appBaseBg}]}>
       <ScrollView style={styles.content}>
         {/* Amount input section */}
         <View style={styles.section}>
@@ -159,7 +155,7 @@ const AddFundsScreen = () => {
               Available Balance: {userWallet?.balance.toFixed(1) || 0}
             </B2>
             <Divider height={9.6} />
-            <View style={styles.amountInput}>
+            <View style={[styles.amountInput, {borderColor: colors.lightGray, backgroundColor: colors.white}]}>
               {showCredits() ? (
                 <B1 textColor="highlight">C</B1>
               ) : (
@@ -174,12 +170,13 @@ const AddFundsScreen = () => {
                 onChangeText={text => {
                   setRechargeAmount(text);
                 }}
-                placeholderTextColor={colors.textPrimary}
+                placeholderTextColor={colors.textSecondary}
                 style={{
                   width: '50%',
                   fontSize: ms(23),
                   textAlign: 'right',
                   fontWeight: '600',
+                  color: colors.textPrimary,
                 }}
               />
             </View>
@@ -197,11 +194,11 @@ const AddFundsScreen = () => {
                     backgroundColor:
                       rechargeAmount === value.toString()
                         ? colors.highlight
-                        : colors.lightGray,
+                        : colors.white,
                     borderColor:
                       rechargeAmount === value.toString()
                         ? colors.highlight
-                        : colors.textSecondary,
+                        : colors.lightGray,
                   },
                 ]}
                 onPress={() => handleQuickAmountSelect(value)}>
@@ -289,7 +286,6 @@ const AddFundsScreen = () => {
 const styles = ScaledSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
   },
 
   content: {
@@ -307,7 +303,6 @@ const styles = ScaledSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderWidth: 2,
-    borderColor: colors.textSecondary,
     padding: '19@ms',
     borderRadius: 20,
   },

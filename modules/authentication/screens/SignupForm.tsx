@@ -116,13 +116,14 @@ const SignupForm: React.FC = () => {
         enableOverDrag={false}
         enableHandlePanningGesture={false}
         handleComponent={() => null}
+        backgroundStyle={{backgroundColor: theme.colors.white}}
         keyboardBehavior="interactive"
         enableContentPanningGesture={false}
         android_keyboardInputMode="adjustResize"
         keyboardBlurBehavior="restore"
         index={1}
         snapPoints={getSnapPoints()}>
-        <BottomSheetView style={styles.contentContainer}>
+        <BottomSheetView style={[styles.contentContainer, {backgroundColor: theme.colors.white}]}>
           <View style={{width: '100%'}}>
             <LabelPrimary customStyles={{paddingLeft: scale(18)}}>
               Enter your Full Name
@@ -194,7 +195,7 @@ const SignupForm: React.FC = () => {
             <View
               style={[
                 styles.containerStyles,
-                {borderColor: theme.colors.textSecondary},
+                {borderColor: theme.colors.lightGray, backgroundColor: theme.colors.white},
               ]}>
               <View
                 style={{
@@ -211,7 +212,7 @@ const SignupForm: React.FC = () => {
                   +91{' '}
                 </Text>
                 <View
-                  style={{width: 1, height: 20, backgroundColor: 'black'}}
+                  style={{width: 1, height: 20, backgroundColor: theme.colors.lightGray}}
                 />
               </View>
               {Platform.OS === 'android' ? (
@@ -231,6 +232,7 @@ const SignupForm: React.FC = () => {
                     fontWeight: '600',
                     paddingVertical: 0,
                     fontSize: moderateScale(15.2),
+                    color: theme.colors.textPrimary,
                   }}
                 />
               ) : (
@@ -248,6 +250,7 @@ const SignupForm: React.FC = () => {
                     fontWeight: '600',
                     paddingVertical: 0,
                     fontSize: moderateScale(15.2),
+                    color: theme.colors.textPrimary,
                   }}
                 />
               )}
@@ -282,7 +285,6 @@ const styles = ScaledSheet.create({
   contentContainer: {
     rowGap: 16,
     width: '100%',
-    backgroundColor: 'white',
     borderRadius: 20,
     paddingTop: 32,
     paddingHorizontal: 24,

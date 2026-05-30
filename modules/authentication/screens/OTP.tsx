@@ -34,7 +34,7 @@ const {width, height} = Dimensions.get('window'); // Get screen dimensions
 
 const OTPForm: React.FC = () => {
   const navigation = useNavigation();
-  const {theme} = useThemeStore();
+  const {colors} = useThemeStore(state => state.theme);
   const headerHeight = useHeaderHeight();
   const {
     confirmationResult,
@@ -119,16 +119,17 @@ const OTPForm: React.FC = () => {
         enableOverDrag={false}
         enableHandlePanningGesture={false}
         handleComponent={() => null}
+        backgroundStyle={{backgroundColor: colors.white}}
         keyboardBehavior="interactive"
         enableContentPanningGesture={false}
         android_keyboardInputMode="adjustResize"
         keyboardBlurBehavior="restore"
         index={1}
         snapPoints={getSnapPoints()}>
-        <BottomSheetView>
-          <View style={styles.contentContainer}>
+        <BottomSheetView style={{backgroundColor: colors.white}}>
+          <View style={[styles.contentContainer, {backgroundColor: colors.white}]}>
             <View style={{width: '100%'}}>
-              <Text style={styles.label}>Please Enter the OTP Received</Text>
+              <Text style={[styles.label, {color: colors.textPrimary}]}>Please Enter the OTP Received</Text>
               <Divider height={10} />
               {Platform.OS === 'android' ? (
                 <BottomSheetStyledInput
@@ -168,7 +169,7 @@ const OTPForm: React.FC = () => {
               }}>
               <Text
                 style={{
-                  color: theme.colors.highlight,
+                  color: colors.highlight,
                   fontSize: 10,
                   fontWeight: '600',
                   textDecorationLine: 'underline',
@@ -220,7 +221,6 @@ const styles = ScaledSheet.create({
   contentContainer: {
     rowGap: 16,
     width: '100%',
-    backgroundColor: 'white', // Optional: Adds a dark overlay for text readability
     borderRadius: 20,
     paddingTop: 32,
     paddingHorizontal: 24,

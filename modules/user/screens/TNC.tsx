@@ -1,4 +1,3 @@
-// export default TNC;
 import React, {useEffect, useState} from 'react';
 
 // services
@@ -9,8 +8,13 @@ import RenderHtml from 'react-native-render-html';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ScrollView} from 'react-native-gesture-handler';
 
+// theme store
+import {useThemeStore} from '@/globalStore';
+
 const TNC: React.FC = () => {
   const [htmlUrl, setHtmlUrl] = useState<any>(null);
+  const {colors} = useThemeStore(state => state.theme);
+
   const SUPABASE_URL = 'https://gjbbbucnydedrqbydwou.supabase.co';
   const SUPABASE_ANON_KEY =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdqYmJidWNueWRlZHJxYnlkd291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1ODQ2MzQsImV4cCI6MjA1ODE2MDYzNH0.VIkbQTD_ZuO6YK_km3W7cCxqx2MZJhPAiUP27Cg48a8';
@@ -35,7 +39,7 @@ const TNC: React.FC = () => {
   }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: colors.appBaseBg}}>
       <ScrollView
         contentContainerStyle={{paddingHorizontal: 10}}
         style={{marginTop: -40}}>
@@ -44,6 +48,7 @@ const TNC: React.FC = () => {
           baseStyle={{
             margin: 0,
             padding: 0,
+            color: colors.textPrimary,
           }}
         />
       </ScrollView>

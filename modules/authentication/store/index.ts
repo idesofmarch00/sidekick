@@ -7,6 +7,14 @@ import {RefObject} from 'react';
 import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {Client} from 'urql';
 
+// client callbacks
+import {
+  setAuthTokenGetter,
+  setAuthTokenSetter,
+  setGraphQLClientGetter,
+} from '@/utils/client';
+
+
 // components
 import WelcomeForm from '../components/WelcomeForm';
 
@@ -240,4 +248,10 @@ const authStore = create<AuthStore & GlobalActions>(set => ({
     })),
 }));
 
+// Register decoupled callbacks to avoid circular dependencies with utils/client
+setAuthTokenGetter(() => authStore.getState().authToken);
+setAuthTokenSetter((token) => authStore.setState(state => ({ ...state, authToken: token })));
+setGraphQLClientGetter(() => authStore.getState().graphQLClient);
+
 export default createSelectors(authStore);
+
