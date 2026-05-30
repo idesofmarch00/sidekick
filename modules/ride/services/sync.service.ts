@@ -155,7 +155,7 @@ class SyncService {
 
     let clientModule: any;
     try {
-      clientModule = require('../../../../utils/client');
+      clientModule = require('../../../utils/client');
     } catch (e) {
       console.warn('[SyncService] Client module not available yet for sync:', e);
       return;
@@ -202,7 +202,7 @@ class SyncService {
 
     let clientModule: any;
     try {
-      clientModule = require('../../../../utils/client');
+      clientModule = require('../../../utils/client');
     } catch (e) {
       console.warn('[SyncService] Client module not available yet for coordinates sync:', e);
       return;
