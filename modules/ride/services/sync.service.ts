@@ -1,5 +1,6 @@
 import sqliteService from './sqlite.service';
 import { gql } from 'urql';
+import { douglasPeucker } from '../utils/journeyUtils';
 
 // Fallback GraphQL documents for sync - can be adapted to exact schema
 const SYNC_RIDE_MUTATION = gql`
@@ -200,6 +201,18 @@ class SyncService {
 
     console.info(`[SyncService] Synchronizing ${coords.length} coordinates in batches...`);
 
+    // Apply Douglas-Peucker compression before uploading to reduce payload by ~70%
+    const coordsForDP = coords.map(c => ({ latitude: c.latitude, longitude: c.longitude }));
+    const compressed = douglasPeucker(coordsForDP, 0.00005);
+    const compressionRatio = ((1 - compressed.length / coords.length) * 100).toFixed(1);
+    console.info(`[SyncService] Douglas-Peucker compression: ${coords.length} → ${compressed.length} coordinates (${compressionRatio}% reduction)`);
+
+    // Map compressed coordinates back to full objects for upload
+    const compressedSet = new Set(compressed.map(c => `${c.latitude},${c.longitude}`));
+    const filteredCoords = coords.filter(c => compressedSet.has(`${c.latitude},${c.longitude}`));
+    // Use filtered coords if we got matches, otherwise fall back to full array
+    const uploadCoords = filteredCoords.length > 0 ? filteredCoords : coords;
+
     let clientModule: any;
     try {
       clientModule = require('../../../utils/client');
@@ -214,8 +227,8 @@ class SyncService {
     }
 
     const batchSize = 100;
-    for (let i = 0; i < coords.length; i += batchSize) {
-      const batch = coords.slice(i, i + batchSize);
+    for (let i = 0; i < uploadCoords.length; i += batchSize) {
+      const batch = uploadCoords.slice(i, i + batchSize);
       const objects = batch.map(c => ({
         id: c.id,
         ride_id: c.ride_id,
@@ -233,8 +246,9 @@ class SyncService {
           variables: { objects }
         });
 
-        // Mark local coordinates rows as Synced
-        const syncedIds = batch.map(c => c.id);
+        // Mark ALL original coordinates as synced (not just the compressed subset)
+        // since the compressed version represents the full ride
+        const syncedIds = coords.map(c => c.id);
         await sqliteService.markCoordinatesSynced(syncedIds);
       } catch (err) {
         console.error('[SyncService] Failed to sync coordinates batch:', err);

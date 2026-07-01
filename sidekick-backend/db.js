@@ -170,6 +170,11 @@ class MockStatement {
         if (this.sql.includes('total_cost = ?')) {
           ride.total_cost = parseFloat(params[1]);
         }
+        if (this.sql.includes("status = 'FLAGGED_SPOOFED'")) {
+          ride.status = 'FLAGGED_SPOOFED';
+          ride.spoof_flag = true;
+          console.warn(`[DB] 🚨 Ride ${id} flagged as SPOOFED by anti-cheat validation`);
+        }
         saveData();
       }
       return { changes: 1 };
@@ -348,6 +353,16 @@ class MockStatement {
       }
 
       return results;
+    }
+
+    // 7. SELECT from ride_coordinates WHERE ride_id = ? (used by anti-spoofing validator)
+    if (this.sql.includes('ride_coordinates') && this.sql.includes('ride_id = ?')) {
+      const rideId = params[0];
+      let coords = (data.ride_coordinates || []).filter(c => c.ride_id === rideId);
+      if (this.sql.includes('ORDER BY timestamp ASC')) {
+        coords.sort((a, b) => a.timestamp - b.timestamp);
+      }
+      return coords;
     }
 
     return [];

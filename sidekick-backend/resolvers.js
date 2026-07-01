@@ -1,6 +1,18 @@
 const db = require('./db');
 const { v4: uuidv4 } = require('uuid');
 
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371e3;
+  const phi1 = (lat1 * Math.PI) / 180;
+  const phi2 = (lat2 * Math.PI) / 180;
+  const deltaPhi = ((lat2 - lat1) * Math.PI) / 180;
+  const deltaLambda = ((lon2 - lon1) * Math.PI) / 180;
+  const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+    Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 const resolvers = {
   Query: {
     organizations: () => {
@@ -270,6 +282,7 @@ const resolvers = {
     },
 
     sync_ride_coordinates: (_, { objects }) => {
+      // Upsert all incoming coordinates
       objects.forEach(coord => {
         db.prepare('UPSERT INTO ride_coordinates').run(
           coord.id,
@@ -283,8 +296,48 @@ const resolvers = {
         );
       });
 
+      // Determine the ride_id from the batch
+      const rideId = objects[0].ride_id;
+
+      // Fetch all coordinates for this ride, ordered by timestamp
+      const allCoords = db.prepare(
+        'SELECT latitude, longitude, timestamp FROM ride_coordinates WHERE ride_id = ? ORDER BY timestamp ASC'
+      ).all(rideId);
+
+      // Speed validation across sequential pairs
+      const MAX_SPEED_KMH = 60;
+      let isSpoofed = false;
+
+      for (let i = 1; i < allCoords.length; i++) {
+        const prev = allCoords[i - 1];
+        const curr = allCoords[i];
+        const distanceMeters = haversineDistance(
+          prev.latitude, prev.longitude,
+          curr.latitude, curr.longitude
+        );
+        const timeDiffSeconds = Math.abs(curr.timestamp - prev.timestamp);
+
+        if (timeDiffSeconds > 0) {
+          const speedKmh = (distanceMeters / timeDiffSeconds) * 3.6;
+          if (speedKmh > MAX_SPEED_KMH) {
+            isSpoofed = true;
+            break;
+          }
+        }
+      }
+
+      const validationStatus = isSpoofed ? 'FLAGGED_SPOOFED' : 'VALID';
+
+      // Flag the ride record if spoofed
+      if (isSpoofed) {
+        db.prepare(
+          "UPDATE ride_details SET status = 'FLAGGED_SPOOFED' WHERE id = ?"
+        ).run(rideId);
+      }
+
       return {
         affected_rows: objects.length,
+        validation_status: validationStatus,
       };
     },
 

@@ -163,6 +163,7 @@ const schema = `
 
   type ride_coordinates_mutation_response {
     affected_rows: Int!
+    validation_status: String
   }
 
   type Transaction {

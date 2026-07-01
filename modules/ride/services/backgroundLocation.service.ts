@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import sqliteService, { LocalCoordinate } from './sqlite.service';
+import { AntiSpoofValidator } from '../utils/antiSpoof';
 
 /**
  * 1D / 2D Kalman Filter for filtering GPS noise and anomalous telemetry spikes.
@@ -74,6 +75,7 @@ class BackgroundLocationService {
   private watchId: number | null = null;
   private activeRideId: string | null = null;
   private kalmanFilter = new GPSKalmanFilter(3.0); // 3m/s noise threshold
+  private antiSpoofValidator = new AntiSpoofValidator();
   private simulationInterval: NodeJS.Timeout | null = null;
   private simulationIndex = 0;
 
@@ -88,6 +90,7 @@ class BackgroundLocationService {
 
     this.activeRideId = rideId;
     this.kalmanFilter.reset();
+    this.antiSpoofValidator.reset();
 
     console.info(`[BackgroundLocationService] Starting tracking for ride: ${rideId}`);
 
@@ -214,6 +217,12 @@ class BackgroundLocationService {
   private async handleLocationUpdate(position: any) {
     if (!this.activeRideId) return;
 
+    // Anti-Spoofing Layer: Check for mock GPS providers and speed anomalies
+    if (this.antiSpoofValidator.processCoordinate(position)) {
+      console.warn(`[BackgroundLocationService] 🚨 GPS SPOOF DETECTED for ride: ${this.activeRideId}`);
+      // Flag is recorded but we continue tracking to collect evidence for backend validation
+    }
+
     const { latitude, longitude, altitude, speed, accuracy } = position.coords;
     const timestamp = position.timestamp;
 
@@ -252,6 +261,21 @@ class BackgroundLocationService {
 
   private disableNativeBackgroundService() {
     // Graceful no-op stop
+  }
+
+  /**
+   * Returns whether the anti-spoof validator has flagged this ride session.
+   * Can be called by the ride screen to show warnings or block ride completion.
+   */
+  public isSpoofDetected(): boolean {
+    return this.antiSpoofValidator.isSpoofDetected();
+  }
+
+  /**
+   * Returns the total number of spoof flags for the current ride.
+   */
+  public getSpoofFlagCount(): number {
+    return this.antiSpoofValidator.getSpoofFlagCount();
   }
 }
 
